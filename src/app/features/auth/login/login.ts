@@ -40,7 +40,7 @@ export class Login {
           this.router.navigate(['/']); 
         },
         error: (err) => {
-          // if NO (401, 403) -> display error message
+          // if NOT (401, 403) -> display error message
           this.errorMessage = 'Credentials incorrect or server is not joinable.';
           console.error('Connexion error:', err);
         }

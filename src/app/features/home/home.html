@@ -2,8 +2,19 @@
   <h1 class="text-3xl font-bold text-emerald-600 mb-4">Welcome to AllMart</h1>
   <p class="text-gray-700">The product catalog will be displayed here.</p>
   
-  <button routerLink="/login" 
-          class="bg-emerald-600 text-white p-2 rounded mt-2 hover:bg-emerald-700 transition-colors cursor-pointer">
-      Login
-  </button>
+  <div class="mt-6">
+    @if (isAuthenticated) {
+      <p class="text-sm text-green-600 mb-2">You are securely logged in.</p>
+      <button (click)="onLogout()" 
+              class="bg-emerald-500 text-white p-2 rounded hover:bg-emerald-600 transition-colors cursor-pointer">
+        Logout
+      </button>
+    } @else {
+      <p class="text-sm text-gray-500 mb-2">You are currently a guest.</p>
+      <button routerLink="/login" 
+              class="bg-emerald-600 text-white p-2 rounded hover:bg-emerald-700 transition-colors cursor-pointer">
+        Login
+      </button>
+    }
+  </div>
 </div>

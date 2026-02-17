@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Auth } from '../../core/services/auth';
 
 @Component({
   selector: 'app-home',
@@ -8,5 +9,13 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.css',
 })
 export class Home {
+  private auth = inject(Auth);
+
+  isAuthenticated = this.auth.isLoggedIn();
+
+  onLogout(): void {
+    this.auth.logout();
+    this.isAuthenticated = false;
+  }
 
 }
