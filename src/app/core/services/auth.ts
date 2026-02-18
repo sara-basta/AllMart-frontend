@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginRequest } from '../models/auth/login-request.model';
 import { AuthResponse } from '../models/auth/auth-response.model';
+import { RegisterRequest } from '../models/auth/register-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +32,10 @@ export class Auth {
 
   logout(): void {
     localStorage.removeItem('jwt_token');
+  }
+
+  register(credentials: RegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`,credentials);
   }
 
 }
