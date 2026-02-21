@@ -1,7 +1,7 @@
 <div class="max-w-7xl mx-auto mt-10 p-6">
   <h1 class="text-3xl font-bold text-emerald-600 mb-8">Welcome to AllMart</h1>
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      @for (item of productList; track item.id) {
+      @for (item of productList(); track item.id) {
         <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col">
           <div class="h-48 w-full bg-gray-50 flex items-center justify-center overflow-hidden border-b border-gray-100">
             

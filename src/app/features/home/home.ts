@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../core/services/product/product';
 import { ProductResponse } from '../../core/models/product/product-response.model';
@@ -13,12 +13,12 @@ export class Home implements OnInit {
 
   public product = inject(Product);
 
-  productList: ProductResponse[] = [];
+  productList = signal<ProductResponse[]>([]);
 
   ngOnInit(): void {
     this.product.getAllProducts().subscribe({
       next: (data) => {
-        this.productList = data.content;
+        this.productList.set(data.content);
       },
       error: (err) => {
         console.error('Failed to fetch products', err);
