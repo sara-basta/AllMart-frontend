@@ -2,7 +2,7 @@ import { Component,inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, EmailValidator } from '@angular/forms';
 import { Router, RouterLink} from '@angular/router';
-import { Auth } from '../../../core/services/auth';
+import { Auth } from '../../../core/services/auth/auth';
 import { RegisterRequest } from '../../../core/models/auth/register-request.model';
 import { GoBackButton } from '../../../shared/components/go-back-button/go-back-button';
 
@@ -51,5 +51,4 @@ export class Register {
 
     }
   }
-
 }

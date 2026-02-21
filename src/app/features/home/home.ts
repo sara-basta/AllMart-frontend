@@ -1,21 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { Auth } from '../../core/services/auth';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
-  private auth = inject(Auth);
-
-  isAuthenticated = this.auth.isLoggedIn();
-
-  onLogout(): void {
-    this.auth.logout();
-    this.isAuthenticated = false;
-  }
-
+  
 }
