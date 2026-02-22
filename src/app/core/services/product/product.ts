@@ -16,4 +16,14 @@ export class Product {
   getAllProducts(): Observable<PaginatedResponse<ProductResponse>> {
     return this.http.get<PaginatedResponse<ProductResponse>>(this.apiUrl);
   }
+
+  // get by id
+  getProductById(id: number): Observable<ProductResponse> {
+    return this.http.get<ProductResponse>(`${this.apiUrl}/${id}`);
+  }
+
+
+  //search products
+
+
 }

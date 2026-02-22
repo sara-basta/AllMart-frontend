@@ -2,10 +2,11 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../core/services/product/product';
 import { ProductResponse } from '../../core/models/product/product-response.model';
+import { ProductCard } from '../../shared/components/product-card/product-card';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule],
+  imports: [CommonModule,ProductCard],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
