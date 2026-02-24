@@ -2,10 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Auth } from '../../services/auth/auth';
 import { Router, RouterLink } from '@angular/router';
 import { User } from '../../services/user/user';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink,FormsModule],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -26,5 +27,15 @@ export class Header implements OnInit{
     localStorage.removeItem('jwt_token');
     this.user.clearUser();
     this.router.navigate(['/home']);
+  }
+
+  searchTerm = '';
+
+  onSearch(): void {
+    if (this.searchTerm.trim()) {
+      this.router.navigate(['/'], { queryParams: { name: this.searchTerm.trim() } });
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 }

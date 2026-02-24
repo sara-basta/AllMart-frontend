@@ -1,12 +1,50 @@
 <div class="max-w-7xl mx-auto mt-10 p-6">
   <h1 class="text-3xl font-bold text-slate-900 mb-8">Welcome to AllMart</h1>
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      @for (item of productList(); track item.id) {
-        <app-product-card [product]="item"></app-product-card>
-      } @empty {
-        <div class="col-span-full text-center py-10 text-slate-500">
-          <p>No products to show</p>
+
+  <div class="flex flex-col md:flex-row gap-10">
+
+    <aside class="w-full md:w-64 flex-shrink-0">
+      <div class="sticky top-24">
+        
+        <div class="border-b border-slate-200 pb-6 mb-6">
+          <h2 class="text-sm font-semibold text-slate-900 uppercase tracking-widest mb-4">Price Filter</h2>
+          
+          <div class="flex flex-col gap-3">
+            <input 
+              type="number" 
+              [(ngModel)]="minTerm" 
+              (keyup.enter)="applyFilters()"
+              placeholder="Min price (MAD)" 
+              class="w-full px-4 py-2 bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-md focus:outline-none focus:border-slate-900 transition-colors appearance-none"
+            >
+            <input 
+              type="number" 
+              [(ngModel)]="maxTerm" 
+              (keyup.enter)="applyFilters()"
+              placeholder="Max price (MAD)" 
+              class="w-full px-4 py-2 bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-md focus:outline-none focus:border-slate-900 transition-colors appearance-none"
+            >
+            <button (click)="applyFilters()" class="w-full mt-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium py-2.5 rounded-md transition-colors cursor-pointer">
+              Apply Filters
+            </button>
+          </div>
         </div>
-      }
-    </div>
+        
+      </div>
+    </aside>
+
+    <main class="flex-1">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+        @for (item of productList(); track item.id) {
+          <app-product-card [product]="item"></app-product-card>
+        } @empty {
+          <div class="col-span-full text-center py-20 text-slate-500 bg-slate-50 rounded-lg">
+            <p>No products to show.</p>
+            <button (click)="minTerm=null; maxTerm=null; applyFilters()" class="text-slate-900 underline hover:text-slate-600 mt-2 cursor-pointer text-sm font-medium">Clear filters</button>
+          </div>
+        }
+      </div>
+    </main>
+
+  </div>
 </div>

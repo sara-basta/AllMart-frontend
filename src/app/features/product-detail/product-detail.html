@@ -1,0 +1,64 @@
+@if (productRes()) {
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    
+    <a routerLink="/" class="group inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-900 mb-12 transition-colors cursor-pointer">
+      <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      Back to catalog
+    </a>
+
+    <div class="flex flex-col md:flex-row gap-12 lg:gap-20">
+      
+      <div class="md:w-1/2 flex items-center justify-center bg-slate-50 rounded-2xl aspect-square overflow-hidden">
+        @if (productRes()?.imageUrl) {
+          <img [src]="productRes()?.imageUrl" [alt]="productRes()?.name" class="w-full h-full object-cover" />
+        } @else {
+          <div class="flex flex-col items-center text-slate-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span class="text-sm tracking-wide">No image available</span>
+          </div>
+        }
+      </div>
+
+      <div class="md:w-1/2 flex flex-col justify-center py-4">
+        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">{{ productRes()?.name }}</h1>
+        <p class="text-2xl font-semibold text-slate-900 mb-8">{{ productRes()?.price }} MAD</p>
+        
+        <div class="mb-12 text-slate-600 leading-relaxed whitespace-pre-line text-base">
+          {{ productRes()?.description }}
+        </div>
+
+        <div class="mt-auto flex flex-col sm:flex-row gap-4 w-full">
+          
+          <button class="flex-1 bg-white hover:bg-slate-50 text-slate-900 border border-slate-300 font-medium py-4 px-6 rounded-full transition-all flex items-center justify-center gap-3 cursor-pointer shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+            Add to Cart
+          </button>
+
+          <button class="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-medium py-4 px-6 rounded-full transition-all flex items-center justify-center gap-3 cursor-pointer shadow-md">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            Buy now
+          </button>
+          
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+} @else {
+  <div class="min-h-[70vh] flex flex-col items-center justify-center text-slate-400">
+    <svg class="animate-spin h-8 w-8 text-slate-900 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    <span class="text-sm tracking-wide">Loading...</span>
+  </div>
+}
