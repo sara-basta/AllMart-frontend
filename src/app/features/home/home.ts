@@ -1,64 +1,53 @@
-import { FormsModule } from '@angular/forms';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core'; // <--- You were missing 'signal' here
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Product } from '../../core/services/product/product';
-import { ProductResponse } from '../../core/models/product/product-response.model';
-import { ProductCard } from '../../shared/components/product-card/product-card';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule,ProductCard,FormsModule],
+  imports: [RouterLink, CommonModule],
   templateUrl: './home.html',
-  styleUrl: './home.css',
+  styleUrl: './home.css'
 })
-export class Home implements OnInit {
+export class Home {
 
-  public product = inject(Product);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  minTerm: number | null = null;
-  maxTerm: number | null = null;
-
-  productList = signal<ProductResponse[]>([]);
-
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const searchTerm = params['name'];
-      const minTerm = params['minPrice'];
-      const maxTerm = params['maxPrice'];
-
-      if (searchTerm || minTerm || maxTerm) {
-        this.product.searchProduct(searchTerm,undefined,minTerm,maxTerm).subscribe({
-          next: (data) => {
-            this.productList.set(data.content);
-          },
-          error: (err) => {
-            console.error('Failed to search products', err);
-          }
-        });
-      } else {
-        this.product.getAllProducts().subscribe({
-          next: (data) => {
-            this.productList.set(data.content);
-          },
-          error: (err) => {
-            console.error('Failed to fetch products', err);
-          }
-        });
-      }
-    });
-  }
-applyFilters(): void {
-    const queryParams: any = {};
-    const currentName = this.route.snapshot.queryParamMap.get('name');
-    if (currentName) {
-      queryParams.name = currentName;
+  slides = [
+    {
+      image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2000&auto=format&fit=crop',
+      badge: 'Welcome to AllMart',
+      title: 'Everything you need.',
+      subtitle: 'From daily groceries to the latest electronics. Millions of items, right here.',
+      ctaText: 'Shop All Departments',
+      ctaLink: '/catalog'
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=2000&auto=format&fit=crop',
+      badge: 'Tech Week Sale',
+      title: 'Up to 40% Off Tech',
+      subtitle: 'Upgrade your workstation with our latest arrivals in electronics and accessories.',
+      ctaText: 'Shop Electronics',
+      ctaLink: '/catalog?categoryId=2'
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2000&auto=format&fit=crop',
+      badge: 'New Collection',
+      title: 'Spring Fashion 2026',
+      subtitle: 'Discover the latest trends in clothing and accessories for the new season.',
+      ctaText: 'Explore Fashion',
+      ctaLink: '/catalog?categoryId=3'
     }
+  ];
 
-    if (this.minTerm) queryParams.minPrice = this.minTerm;
-    if (this.maxTerm) queryParams.maxPrice = this.maxTerm;
+  currentSlide = signal(0);
 
-    this.router.navigate(['/'], { queryParams });
+  nextSlide() {
+    this.currentSlide.update((i: number) => (i + 1) % this.slides.length);
+  }
+
+  prevSlide() {
+    this.currentSlide.update((i: number) => (i === 0 ? this.slides.length - 1 : i - 1));
+  }
+
+  setSlide(index: number) {
+    this.currentSlide.set(index);
   }
 }

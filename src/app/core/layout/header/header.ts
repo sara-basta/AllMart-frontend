@@ -19,7 +19,7 @@ export class Header implements OnInit{
   ngOnInit(): void {
     // when the header appears, check if we have a token
     if (this.auth.getToken()) {
-      this.user.fetchAndSaveProfile(); 
+      this.user.fetchAndSaveProfile();
     }
   }
 
@@ -33,9 +33,9 @@ export class Header implements OnInit{
 
   onSearch(): void {
     if (this.searchTerm.trim()) {
-      this.router.navigate(['/'], { queryParams: { name: this.searchTerm.trim() } });
+      this.router.navigate(['catalog'], { queryParams: { name: this.searchTerm.trim() } });
     } else {
-      this.router.navigate(['/']);
+      this.router.navigate(['catalog']);
     }
   }
 }

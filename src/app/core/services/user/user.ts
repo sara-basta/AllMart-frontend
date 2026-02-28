@@ -14,12 +14,10 @@ export class User {
 
   currentUserSignal = signal<UserResponse | null>(null);
 
-  isAuthenticated = false;
-
   getCurrentUser(): Observable<UserResponse>{
     return this.http.get<UserResponse>(`${this.apiUrl}/profile`);
   }
-  
+
   fetchAndSaveProfile() {
     this.getCurrentUser().subscribe({
       next: (user) => {

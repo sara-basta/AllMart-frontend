@@ -1,11 +1,11 @@
 <div class="max-w-6xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-  
+
   <div class="mb-16">
     <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">My Account</h1>
   </div>
 
   <div class="flex flex-col md:flex-row gap-16 lg:gap-24">
-    
+
     <aside class="w-full md:w-48 flex-shrink-0">
       <nav class="flex flex-col gap-5 text-sm font-medium">
         <a class="text-slate-900 underline underline-offset-4 cursor-pointer">Profile</a>
@@ -17,7 +17,7 @@
     <main class="flex-1 max-w-2xl">
       @if (user.currentUserSignal()) {
         <div class="flex flex-col gap-10">
-          
+
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 border-b border-slate-100 pb-10">
             <div>
               <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">First Name</p>
@@ -60,6 +60,6 @@
         </div>
       }
     </main>
-    
+
   </div>
 </div>

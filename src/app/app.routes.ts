@@ -6,17 +6,19 @@ import { Home } from './features/home/home';
 import { guestGuard } from './core/guards/guest-guard';
 import { MainLayout } from './core/layout/main-layout/main-layout';
 import { ProductDetail } from './features/product-detail/product-detail';
+import {Catalog} from './features/catalog/catalog';
 
 export const routes: Routes = [
-    { path: 'login', component: Login, canActivate: [guestGuard]}, 
+    { path: 'login', component: Login, canActivate: [guestGuard]},
     { path: 'register', component: Register, canActivate: [guestGuard] },
-    { 
-        path: '', 
-        component: MainLayout, 
+    {
+        path: '',
+        component: MainLayout,
         children: [
             { path: '', component: Home },
             { path : 'profile', component: Profile},
-            { path : 'products/:id', component: ProductDetail}
+            { path : 'products/:id', component: ProductDetail},
+            { path : 'catalog', component: Catalog}
         ]
     },
     { path: '**', redirectTo: '' }
