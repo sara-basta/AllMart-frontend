@@ -1,47 +1,62 @@
-<div class="max-w-sm mx-auto mt-20 p-6 bg-white border border-slate-200 rounded-lg">
-  <app-go-back-button></app-go-back-button>
-  <h2 class="text-2xl font-bold text-center text-slate-900 mb-2">AllMart</h2>
-  <p class="text-center text-slate-600 mb-6">Register an account</p>
+<div class="min-h-[75vh] flex items-center justify-center px-6 py-20">
+  <div class="w-full max-w-md">
 
-  @if (errorMessage) {
-    <div class="bg-red-100 text-red-700 p-3 mb-4 rounded">
-      {{ errorMessage }}
-    </div>
-  }
-
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-
-    <div class="flex flex-col">
-      <label for="firstName" class="mb-1 text-slate-700">First Name</label>
-      <input id="firstName" type="text" formControlName="firstName" 
-             class="border border-slate-300 p-2 rounded focus:outline-slate-400">
+    <div class="mb-12">
+      <app-go-back-button></app-go-back-button>
     </div>
 
-    <div class="flex flex-col">
-      <label for="lastName" class="mb-1 text-slate-700">Last Name</label>
-      <input id="lastName" type="text" formControlName="lastName" 
-             class="border border-slate-300 p-2 rounded focus:outline-slate-400">
-    </div>
-    
-    <div class="flex flex-col">
-      <label for="email" class="mb-1 text-slate-700">Email</label>
-      <input id="email" type="email" formControlName="email" 
-             class="border border-slate-300 p-2 rounded focus:outline-slate-400">
+    <div class="mb-12 text-center">
+      <h1 class="text-4xl font-black text-slate-900 tracking-tighter uppercase mb-4">AllMart.</h1>
+      <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Create an account</p>
     </div>
 
-    <div class="flex flex-col">
-      <label for="password" class="mb-1 text-slate-700">Password</label>
-      <input id="password" type="password" formControlName="password" 
-             class="border border-slate-300 p-2 rounded focus:outline-slate-400">
+    @if (errorMessage) {
+      <div class="bg-red-50 text-red-600 border border-red-100 p-4 mb-8 text-sm text-center font-bold uppercase tracking-wide">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="flex flex-col">
+          <label for="firstName" class="text-xs font-bold uppercase tracking-widest text-slate-900 mb-3">First Name</label>
+          <input id="firstName" type="text" formControlName="firstName"
+                 class="border border-slate-200 px-5 py-3 text-slate-900 text-sm focus:border-slate-900 focus:outline-none transition-colors">
+        </div>
+
+        <div class="flex flex-col">
+          <label for="lastName" class="text-xs font-bold uppercase tracking-widest text-slate-900 mb-3">Last Name</label>
+          <input id="lastName" type="text" formControlName="lastName"
+                 class="border border-slate-200 px-5 py-3 text-slate-900 text-sm focus:border-slate-900 focus:outline-none transition-colors">
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label for="email" class="text-xs font-bold uppercase tracking-widest text-slate-900 mb-3">Email Address</label>
+        <input id="email" type="email" formControlName="email"
+               class="border border-slate-200 px-5 py-3 text-slate-900 text-sm focus:border-slate-900 focus:outline-none transition-colors">
+      </div>
+
+      <div class="flex flex-col">
+        <label for="password" class="text-xs font-bold uppercase tracking-widest text-slate-900 mb-3">Password</label>
+        <input id="password" type="password" formControlName="password"
+               class="border border-slate-200 px-5 py-3 text-slate-900 text-sm focus:border-slate-900 focus:outline-none transition-colors">
+      </div>
+
+      <button type="submit"
+              class="w-full bg-slate-900 text-white px-8 py-4 mt-6 text-sm font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors cursor-pointer shadow-sm">
+        Create Account
+      </button>
+
+    </form>
+
+    <div class="mt-12 text-center">
+      <p class="text-sm text-slate-500">
+        Already have an account?
+        <a routerLink="/login" class="font-bold text-slate-900 uppercase tracking-widest hover:text-slate-600 transition-colors underline underline-offset-4 ml-2 cursor-pointer">Sign In</a>
+      </p>
     </div>
 
-    <button type="submit" 
-            class="bg-slate-900 text-white p-2 rounded mt-2 hover:bg-slate-800 transition-colors cursor-pointer">
-      Register
-    </button>
-    <p class="text-sm text-center text-slate-600 mt-2">
-      Already have an account? <a routerLink="/login" class="text-slate-700 hover:underline cursor-pointer">Login here</a>
-    </p>
-    
-  </form>
+  </div>
 </div>
