@@ -7,6 +7,7 @@ import { guestGuard } from './core/guards/guest-guard';
 import { MainLayout } from './core/layout/main-layout/main-layout';
 import { ProductDetail } from './features/product-detail/product-detail';
 import {Catalog} from './features/catalog/catalog';
+import { CartPage } from './features/cart-page/cart-page';
 
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard]},
@@ -18,7 +19,8 @@ export const routes: Routes = [
             { path: '', component: Home },
             { path : 'profile', component: Profile},
             { path : 'products/:id', component: ProductDetail},
-            { path : 'catalog', component: Catalog}
+            { path : 'catalog', component: Catalog},
+            { path : 'cart', component: CartPage}
         ]
     },
     { path: '**', redirectTo: '' }

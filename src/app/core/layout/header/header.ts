@@ -3,6 +3,7 @@ import { Auth } from '../../services/auth/auth';
 import { Router, RouterLink } from '@angular/router';
 import { User } from '../../services/user/user';
 import { FormsModule } from '@angular/forms';
+import { Cart } from '../../services/cart/cart';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +16,9 @@ export class Header implements OnInit{
   private auth = inject(Auth);
   public user = inject(User);
   private router = inject(Router);
+  private cart = inject(Cart);
+
+  totalItems = this.cart.cartCount;
 
   ngOnInit(): void {
     // when the header appears, check if we have a token
