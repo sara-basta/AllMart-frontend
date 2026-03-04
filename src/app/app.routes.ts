@@ -1,4 +1,5 @@
 import { Profile } from './features/profile/profile';
+import { AddressForm } from './features/profile/address-form/address-form';
 import { Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register'
@@ -18,6 +19,7 @@ export const routes: Routes = [
         children: [
             { path: '', component: Home },
             { path : 'profile', component: Profile},
+            { path : 'profile/address', component: AddressForm},
             { path : 'products/:id', component: ProductDetail},
             { path : 'catalog', component: Catalog},
             { path : 'cart', component: CartPage}
