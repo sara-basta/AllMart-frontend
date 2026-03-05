@@ -90,4 +90,11 @@ export class Cart {
         .filter(i => i.product.id !== productId)
     );
   }
+  clearLocalCart() {
+    this.cartItems.set([]);
+
+    localStorage.removeItem('allmart_cart');
+
+    console.log('Local cart cleared on logout.');
+  }
 }

@@ -27,10 +27,8 @@ export class Header implements OnInit{
     }
   }
 
-  onLogout(): void {
-    localStorage.removeItem('jwt_token');
-    this.user.clearUser();
-    this.router.navigate(['/home']);
+  logout(): void {
+    this.auth.logout();
   }
 
   searchTerm = '';
