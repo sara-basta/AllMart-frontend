@@ -2,6 +2,7 @@ import {Injectable, signal, computed, effect, inject} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {CartItem} from '../../models/cart/cart-item.model';
 import { ProductResponse } from '../../models/product/product-response.model';
+import { User } from '../user/user';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ import { ProductResponse } from '../../models/product/product-response.model';
 export class Cart {
 
   private http = inject(HttpClient);
+  private user = inject(User);
 
   private apiUrl = 'http://localhost:8080/api/carts';
 
@@ -46,6 +48,29 @@ export class Cart {
   constructor() {
     effect(() => {
       localStorage.setItem('allmart_cart', JSON.stringify(this.cartItems()));
+    });
+
+    // sync guest cart with user cart once the user logs in
+    effect(() => {
+      const items = this.cartItems();
+      const user = this.user.currentUserSignal();
+
+      if (user && items.length >= 0) {
+        this.syncWithBackend(items);
+      }
+    });
+  }
+
+  private syncWithBackend(items: CartItem[]) {
+    // take on productId and quantity from the response to fit the backend structure
+    const payload = items.map(item => ({
+      productId: item.product.id,
+      quantity: item.quantity
+    }));
+
+    this.http.post(`${this.apiUrl}/sync`, payload).subscribe({
+      next: () => console.log('Cart synced with database'),
+      error: (err) => console.error('Sync failed:', err)
     });
   }
 
