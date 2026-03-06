@@ -1,0 +1,93 @@
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+  <div class="mb-12">
+    <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Checkout.</h1>
+    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Finalize your order details</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+
+    <div class="lg:col-span-2 space-y-12">
+
+      <section>
+        <div class="flex justify-between items-end mb-6">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-900">1. Shipping Address</h3>
+          <a routerLink="/profile" class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors">Manage Addresses</a>
+        </div>
+
+        @if (userAddresses().length > 0) {
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            @for (addr of userAddresses(); track addr.id) {
+              <div
+                (click)="selectedAddressId.set(addr.id)"
+                [class.border-slate-900]="selectedAddressId() === addr.id"
+                [class.border-slate-100]="selectedAddressId() !== addr.id"
+                class="group p-6 border-2 cursor-pointer transition-all hover:bg-slate-50 relative">
+
+                @if (selectedAddressId() === addr.id) {
+                  <div class="absolute top-4 right-4 text-slate-900">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                }
+
+                <p class="text-xs font-black text-slate-900 uppercase mb-1">{{ addr.Street }}</p>
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">{{ addr.city }}, {{ addr.zipCode }}</p>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="bg-slate-50 p-10 text-center border border-dashed border-slate-200">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">No addresses found</p>
+            <button routerLink="/profile" class="bg-slate-900 text-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all cursor-pointer border-none">
+              Add New Address
+            </button>
+          </div>
+        }
+      </section>
+
+      <section>
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-900 mb-6">2. Payment Method</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <div
+            (click)="selectedPayment.set('CASH_ON_DELIVERY')"
+            [class.border-slate-900]="selectedPayment() === 'CASH_ON_DELIVERY'"
+            [class.border-slate-100]="selectedPayment() !== 'CASH_ON_DELIVERY'"
+            class="p-6 border-2 cursor-pointer transition-all hover:bg-slate-50">
+            <span class="text-xs font-black text-slate-900 uppercase block mb-1">Cash on Delivery</span>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Pay securely when your package arrives.</p>
+          </div>
+
+          <div
+            (click)="selectedPayment.set('CREDIT_CARD')"
+            [class.border-slate-900]="selectedPayment() === 'CREDIT_CARD'"
+            [class.border-slate-100]="selectedPayment() !== 'CREDIT_CARD'"
+            class="p-6 border-2 cursor-pointer transition-all hover:bg-slate-50">
+            <span class="text-xs font-black text-slate-900 uppercase block mb-1">Credit Card</span>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Pay now using your card details.</p>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <div class="lg:col-span-1">
+      <div class="bg-slate-50 p-8 sticky top-32 border border-slate-100">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-900 mb-8 border-b border-slate-200 pb-4">Order Summary</h3>
+
+        <button
+          (click)="confirmOrder()"
+          [disabled]="!selectedAddressId() || !selectedPayment()"
+          class="w-full bg-slate-900 text-white py-5 text-xs font-bold uppercase tracking-widest disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-800 transition-all cursor-pointer border-none shadow-sm active:translate-y-0.5">
+          Confirm Order.
+        </button>
+
+        <p class="text-[9px] text-center text-slate-400 uppercase font-bold tracking-tighter mt-6 leading-relaxed">
+          By confirming, you agree to the AllMart Terms of Service.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>

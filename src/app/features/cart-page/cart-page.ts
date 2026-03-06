@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Cart } from '../../core/services/cart/cart';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
+import { Auth } from '../../core/services/auth/auth';
 
 @Component({
   selector: 'app-cart-page',
@@ -10,6 +11,8 @@ import { RouterLink } from '@angular/router';
 })
 export class CartPage {
   private cart = inject(Cart);
+  private router = inject(Router);
+  private auth = inject(Auth);
 
   cartCount = this.cart.cartCount;
   cartItems = this.cart.cartItems;
@@ -21,5 +24,13 @@ export class CartPage {
 
   removeItem(productId: number) {
     this.cart.removeItem(productId);
+  }
+
+  handleCheckout() {
+    if (this.auth.isLoggedIn()) {
+      this.router.navigate(['/cart/checkout']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }

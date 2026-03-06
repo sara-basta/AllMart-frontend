@@ -9,6 +9,7 @@ import { MainLayout } from './core/layout/main-layout/main-layout';
 import { ProductDetail } from './features/product-detail/product-detail';
 import {Catalog} from './features/catalog/catalog';
 import { CartPage } from './features/cart-page/cart-page';
+import {Checkout} from './features/checkout/checkout';
 
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard]},
@@ -22,7 +23,8 @@ export const routes: Routes = [
             { path : 'profile/address', component: AddressForm},
             { path : 'products/:id', component: ProductDetail},
             { path : 'catalog', component: Catalog},
-            { path : 'cart', component: CartPage}
+            { path : 'cart', component: CartPage},
+            { path : 'cart/checkout', component: Checkout}
         ]
     },
     { path: '**', redirectTo: '' }

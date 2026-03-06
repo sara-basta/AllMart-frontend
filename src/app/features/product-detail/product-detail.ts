@@ -2,6 +2,7 @@ import { ProductResponse } from './../../core/models/product/product-response.mo
 import {Component, inject, OnInit, signal} from '@angular/core';
 import { Product } from '../../core/services/product/product';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Cart } from '../../core/services/cart/cart';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,6 +14,7 @@ export class ProductDetail implements OnInit{
 
   private product = inject(Product);
   private route = inject(ActivatedRoute);
+  private cart = inject(Cart);
 
   productRes = signal<ProductResponse | null>(null);
 
@@ -32,4 +34,11 @@ export class ProductDetail implements OnInit{
       }
     }
   )};
+
+  addToCart() {
+    const currentProduct = this.productRes();
+    if (currentProduct) {
+      this.cart.addToCart(currentProduct); 
+    }
+  }
 }
