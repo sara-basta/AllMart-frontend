@@ -34,4 +34,8 @@ export class Order {
   createOrder(request: { productId: number; addressId: number }): Observable<OrderResponse> {
     return this.http.post<OrderResponse>(this.ordersApi, request);
   }
+
+  cancelOrder(orderId: number): Observable<OrderResponse> {
+        return this.http.post<OrderResponse>(`${this.ordersApi}/${orderId}/cancel`, null);
+  }
 }

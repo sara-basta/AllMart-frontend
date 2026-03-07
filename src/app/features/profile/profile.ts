@@ -32,6 +32,7 @@ export class Profile implements OnInit{
       this.address.deleteAddress(id);
     }
   }
+
   loadOrderHistory() {
     this.order.getHistory().subscribe({
       next: (data) => {
@@ -42,6 +43,21 @@ export class Profile implements OnInit{
         console.error('Failed to load orders', err);
         this.isLoadingOrders.set(false);
       }
+    });
+  }
+
+  onCancelOrder(orderId: number) {
+    this.order.cancelOrder(orderId).subscribe({
+        next: () => {
+          this.orders.update(orders =>
+            orders.map(
+              o => o.id === orderId ? { ...o, status: 'CANCELLED' } : o
+            )
+          );
+        },
+        error: (err) => {
+          console.error('Failed to cancel order:', err);
+        }
     });
   }
 }
