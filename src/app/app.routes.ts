@@ -10,6 +10,7 @@ import { ProductDetail } from './features/product-detail/product-detail';
 import {Catalog} from './features/catalog/catalog';
 import { CartPage } from './features/cart-page/cart-page';
 import {Checkout} from './features/checkout/checkout';
+import { WishlistPage } from './features/wishlist-page/wishlist-page';
 
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard]},
@@ -24,7 +25,8 @@ export const routes: Routes = [
             { path : 'products/:id', component: ProductDetail},
             { path : 'catalog', component: Catalog},
             { path : 'cart', component: CartPage},
-            { path : 'cart/checkout', component: Checkout}
+            { path : 'cart/checkout', component: Checkout},
+            { path : 'wishlist', component: WishlistPage}
         ]
     },
     { path: '**', redirectTo: '' }

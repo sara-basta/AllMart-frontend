@@ -2,6 +2,7 @@ import { Component, Input,inject} from '@angular/core';
 import { ProductResponse } from '../../../core/models/product/product-response.model';
 import { RouterLink } from '@angular/router';
 import { Cart } from '../../../core/services/cart/cart';
+import { Wishlist } from '../../../core/services/wishlist/wishlist';
 
 @Component({
   selector: 'app-product-card',
@@ -23,4 +24,13 @@ export class ProductCard {
     this.cart.addToCart(this.product);
   }
 
+  wishlist = inject(Wishlist);
+
+  
+  onWishlistClick(event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.wishlist.toggleWishlist(this.product);
+  }
 }

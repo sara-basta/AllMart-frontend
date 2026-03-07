@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { User } from '../../services/user/user';
 import { FormsModule } from '@angular/forms';
 import { Cart } from '../../services/cart/cart';
+import { Wishlist } from '../../services/wishlist/wishlist';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,7 @@ export class Header implements OnInit{
   public user = inject(User);
   private router = inject(Router);
   private cart = inject(Cart);
+  public wishlist = inject(Wishlist);
 
   totalItems = this.cart.cartCount;
 
@@ -24,6 +26,7 @@ export class Header implements OnInit{
     // when the header appears, check if we have a token
     if (this.auth.getToken()) {
       this.user.fetchAndSaveProfile();
+      this.wishlist.loadWishlist();
     }
   }
 
