@@ -1,66 +1,160 @@
 @if (productRes()) {
-  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16 min-h-[75vh]">
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-16 min-h-[75vh]">
 
-    <a routerLink="/catalog" class="group inline-flex items-center text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 mb-12 transition-colors cursor-pointer">
-      <svg class="w-4 h-4 mr-3 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-      </svg>
-      Back to Catalog
-    </a>
+  <a routerLink="/catalog" class="group inline-flex items-center text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 mb-12 transition-colors cursor-pointer">
+    <svg class="w-4 h-4 mr-3 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    </svg>
+    Back to Catalog
+  </a>
 
-    <div class="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
+  <div class="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
 
-      <div class="w-full lg:w-1/2 bg-slate-50 aspect-[4/5] sm:aspect-square flex items-center justify-center relative overflow-hidden">
-        @if (productRes()?.imageUrl) {
-          <img [src]="productRes()?.imageUrl" [alt]="productRes()?.name" class="absolute inset-0 w-full h-full object-cover" />
-        } @else {
-          <div class="flex flex-col items-center text-slate-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    <div class="w-full lg:w-1/2 bg-slate-50 aspect-[4/5] sm:aspect-square flex items-center justify-center relative overflow-hidden">
+      @if (productRes()?.imageUrl) {
+      <img [src]="productRes()?.imageUrl" [alt]="productRes()?.name" class="absolute inset-0 w-full h-full object-cover" />
+      } @else {
+      <div class="flex flex-col items-center text-slate-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span class="text-xs font-bold uppercase tracking-widest">No Image</span>
+      </div>
+      }
+    </div>
+
+    <div class="w-full lg:w-1/2 flex flex-col pt-8 lg:pt-12">
+      <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase mb-4">{{ productRes()?.name }}</h1>
+
+      <div class="flex items-center flex-wrap gap-4 mb-10">
+        <p class="text-xl font-bold text-slate-500">{{ productRes()?.price }} MAD</p>
+
+        <div class="w-px h-5 bg-slate-200 hidden sm:block"></div>
+
+        @if (productRes()?.reviewCount && productRes()?.reviewCount! > 0) {
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-0.5">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" [ngClass]="star <= (productRes()?.averageRating || 0) ? 'text-slate-900' : 'text-slate-200'">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
             </svg>
-            <span class="text-xs font-bold uppercase tracking-widest">No Image</span>
+            }
           </div>
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+            {{ productRes()?.averageRating | number:'1.1-1' }} ({{ productRes()?.reviewCount }} Reviews)
+          </span>
+        </div>
+        } @else {
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">No reviews yet</span>
         }
       </div>
 
-      <div class="w-full lg:w-1/2 flex flex-col pt-8 lg:pt-12">
-
-        <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase mb-4">{{ productRes()?.name }}</h1>
-        <p class="text-xl font-bold text-slate-500 mb-10">{{ productRes()?.price }} MAD</p>
-
-        <div class="mb-12 border-t border-b border-slate-100 py-8">
-          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-900 mb-4">Description</h3>
-          <div class="text-sm text-slate-500 leading-relaxed font-light whitespace-pre-line">
-            {{ productRes()?.description }}
-          </div>
-        </div>
-
-        <div class="flex flex-col sm:flex-row gap-4 w-full mt-auto">
-
-          <button
-          (click)="addToCart()"
-           class="flex-1 bg-transparent border border-slate-900 text-slate-900 px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors flex items-center justify-center cursor-pointer">
-            Add to Cart
-          </button>
-
-          <button 
-          [routerLink]="['/cart/checkout']" 
-          [queryParams]="{ productId: productRes()?.id }"
-          class="flex-1 bg-slate-900 border border-slate-900 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors flex items-center justify-center cursor-pointer shadow-sm">
-            Buy Now
-          </button>
-
+      <div class="mb-12 border-t border-b border-slate-100 py-8">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-900 mb-4">Description</h3>
+        <div class="text-sm text-slate-500 leading-relaxed font-light whitespace-pre-line">
+          {{ productRes()?.description }}
         </div>
       </div>
 
+      <div class="flex flex-col sm:flex-row gap-4 w-full mt-auto">
+        <button (click)="addToCart()" class="flex-1 bg-transparent border border-slate-900 text-slate-900 px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors flex items-center justify-center cursor-pointer">
+          Add to Cart
+        </button>
+
+        <button [routerLink]="['/cart/checkout']" [queryParams]="{ productId: productRes()?.id }" class="flex-1 bg-slate-900 border border-slate-900 text-white px-8 py-4 text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors flex items-center justify-center cursor-pointer shadow-sm">
+          Buy Now
+        </button>
+      </div>
     </div>
   </div>
-} @else {
-  <div class="min-h-[75vh] flex flex-col items-center justify-center text-slate-400">
-    <svg class="animate-spin h-8 w-8 text-slate-900 mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-    </svg>
-    <span class="text-xs font-bold uppercase tracking-widest">Loading Product...</span>
+
+  <div class="mt-24 pt-16 border-t border-slate-100 grid grid-cols-1 lg:grid-cols-3 gap-16">
+
+    <div class="lg:col-span-1">
+      <h3 class="text-xl font-black text-slate-900 uppercase tracking-tighter mb-8">Write a Review.</h3>
+
+      @if (reviewError) {
+      <div class="p-4 mb-6 bg-red-50 border border-red-200 text-red-700 text-[10px] font-bold uppercase tracking-widest">
+        {{ reviewError }}
+      </div>
+      }
+
+      @if (!canUserReview()) {
+      <div class="mb-6 p-4 bg-slate-50 border border-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-widest flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+        </svg>
+        Only verified buyers can review
+      </div>
+      }
+
+      <div class="mb-6" [class.opacity-50]="!canUserReview()">
+        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Your Rating</span>
+        <div class="flex items-center gap-1">
+          @for (star of [1, 2, 3, 4, 5]; track star) {
+          <button (click)="setRating(star)" type="button" [disabled]="!canUserReview()" class="bg-transparent border-none p-0 transition-transform" [ngClass]="canUserReview() ? 'cursor-pointer hover:scale-110' : 'cursor-not-allowed'">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 transition-colors" [ngClass]="star <= newReview.rating ? 'text-slate-900' : 'text-slate-200'">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          }
+        </div>
+      </div>
+
+      <div class="mb-6" [class.opacity-50]="!canUserReview()">
+        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Your Comment</label>
+        <textarea [(ngModel)]="newReview.comment" rows="4" [disabled]="!canUserReview()" class="w-full border-2 border-slate-100 p-4 text-sm font-medium text-slate-900 focus:border-slate-900 focus:outline-none transition-colors bg-slate-50 focus:bg-white resize-none disabled:cursor-not-allowed" placeholder="What did you think about this product?">
+          </textarea>
+      </div>
+
+      <button (click)="submitReview()" [disabled]="isSubmittingReview || !canUserReview()" class="w-full text-white px-8 py-3.5 text-[10px] font-bold uppercase tracking-widest transition-colors border-none shadow-sm disabled:cursor-not-allowed" [ngClass]="canUserReview() ? 'bg-slate-900 hover:bg-slate-800 cursor-pointer' : 'bg-slate-300'">
+        {{ isSubmittingReview ? 'Submitting...' : 'Post Review' }}
+      </button>
+    </div>
+
+    <div class="lg:col-span-2">
+      <div class="flex items-end justify-between mb-8">
+        <h3 class="text-xl font-black text-slate-900 uppercase tracking-tighter">Customer Reviews.</h3>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">{{ reviews().length }} Reviews</span>
+      </div>
+
+      @if (isLoadingReviews()) {
+      <div class="py-12 flex justify-center items-center">
+        <div class="w-8 h-8 border-4 border-slate-200 border-t-slate-900 rounded-full animate-spin"></div>
+      </div>
+      } @else if (reviews().length === 0) {
+      <div class="py-12 text-center border border-slate-100 bg-slate-50">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400">No reviews yet. Be the first to share your thoughts!</p>
+      </div>
+      } @else {
+      <div class="flex flex-col gap-6">
+        @for (reviewItem of reviews(); track reviewItem.id) {
+        <div class="border border-slate-100 p-6 bg-white hover:border-slate-900 transition-colors">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-black text-slate-900 uppercase tracking-widest">{{ reviewItem.firstName }}</span>
+
+            <div class="flex items-center gap-1">
+              @for (star of [1, 2, 3, 4, 5]; track star) {
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" [ngClass]="star <= reviewItem.rating ? 'text-slate-900' : 'text-slate-200'">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+              }
+            </div>
+          </div>
+          <p class="text-sm text-slate-600 leading-relaxed">{{ reviewItem.comment }}</p>
+        </div>
+        }
+      </div>
+      }
+    </div>
   </div>
+</div>
+} @else {
+<div class="min-h-[75vh] flex flex-col items-center justify-center text-slate-400">
+  <svg class="animate-spin h-8 w-8 text-slate-900 mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  </svg>
+  <span class="text-xs font-bold uppercase tracking-widest">Loading Product...</span>
+</div>
 }

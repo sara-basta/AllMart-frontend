@@ -6,4 +6,6 @@ export interface ProductResponse {
     stockQuantity: number;
     categoryName: string;
     imageUrl: string;
+    averageRating?: number;
+    reviewCount?: number;
 }

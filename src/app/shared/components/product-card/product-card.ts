@@ -3,10 +3,11 @@ import { ProductResponse } from '../../../core/models/product/product-response.m
 import { RouterLink } from '@angular/router';
 import { Cart } from '../../../core/services/cart/cart';
 import { Wishlist } from '../../../core/services/wishlist/wishlist';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-product-card',
-  imports: [RouterLink],
+  imports: [RouterLink,CommonModule],
   templateUrl: './product-card.html',
   styleUrl: './product-card.css',
 })
