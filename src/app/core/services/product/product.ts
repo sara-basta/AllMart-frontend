@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductResponse } from '../../models/product/product-response.model';
+import { ProductRequest } from '../../models/product/product-request.model';
 import { PaginatedResponse } from '../../models/paginated-response.model';
 
 @Injectable({
@@ -38,5 +39,29 @@ export class Product {
   }
 
   return this.http.get<PaginatedResponse<ProductResponse>>(this.apiUrl, { params });
-}
+  }
+
+  getAdminProducts(page: number = 0, size: number = 10, includeDeleted: boolean = true): Observable<PaginatedResponse<ProductResponse>> {
+    return this.http.get<PaginatedResponse<ProductResponse>>(`${this.apiUrl}/admin?page=${page}&size=${size}&includeDeleted=${includeDeleted}`);
+  }
+
+  deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  createProduct(productData: ProductRequest): Observable<ProductResponse> {
+    return this.http.post<ProductResponse>(this.apiUrl, productData);
+  }
+
+  updateProductPrice(id: number, price: number): Observable<ProductResponse> {
+    return this.http.patch<ProductResponse>(`${this.apiUrl}/${id}/price`, { price: price }); 
+  }
+
+  updateProductStock(id: number, stockQuantity: number): Observable<ProductResponse> {
+    return this.http.patch<ProductResponse>(`${this.apiUrl}/${id}/stock`, { stock: stockQuantity });
+  }
+
+  updateProductCategory(id: number, categoryId: number): Observable<ProductResponse> {
+    return this.http.patch<ProductResponse>(`${this.apiUrl}/${id}/category`, { categoryId: categoryId });
+  }
 }

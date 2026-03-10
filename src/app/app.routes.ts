@@ -4,13 +4,18 @@ import { Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register'
 import { Home } from './features/home/home';
-import { guestGuard } from './core/guards/guest-guard';
+import { guestGuard } from './core/guards/guest/guest-guard';
+import { adminGuard } from './core/guards/admin/admin-guard';
 import { MainLayout } from './core/layout/main-layout/main-layout';
+import { AdminLayout } from './core/layout/admin-layout/admin-layout';
 import { ProductDetail } from './features/product-detail/product-detail';
 import {Catalog} from './features/catalog/catalog';
 import { CartPage } from './features/cart-page/cart-page';
 import {Checkout} from './features/checkout/checkout';
 import { WishlistPage } from './features/wishlist-page/wishlist-page';
+import { AdminDashboard } from './features/admin/admin-dashboard/admin-dashboard';
+import { Products } from './features/admin/products/products';
+import { ProductForm } from './features/admin/products/product-form/product-form';
 
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard]},
@@ -27,6 +32,22 @@ export const routes: Routes = [
             { path : 'cart', component: CartPage},
             { path : 'cart/checkout', component: Checkout},
             { path : 'wishlist', component: WishlistPage}
+        ]
+    },
+    {
+        path: 'admin',
+        component: AdminLayout,
+        canActivate: [adminGuard],
+        children: [
+        { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    
+        { path: 'dashboard', component: AdminDashboard },
+        { path: 'products', component: Products },
+        { path: 'products/new', component: ProductForm },
+        { path: 'products/:id', component: ProductForm },
+        // { path: 'categories', component: Categories },
+        // { path: 'orders', component: Orders },
+        // { path: 'users', component: Users },
         ]
     },
     { path: '**', redirectTo: '' }

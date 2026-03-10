@@ -14,7 +14,7 @@ import { GoBackButton } from '../../../shared/components/go-back-button/go-back-
 })
 export class Login {
   private fb = inject(FormBuilder);
-  private auth = inject(Auth); // auth service
+  private auth = inject(Auth);
   private router = inject(Router);
 
   loginForm = this.fb.group({
@@ -35,13 +35,17 @@ export class Login {
       // send the data to the auth service
       this.auth.login(credentials).subscribe({
         next: (response) => {
-          // if OK (200) -> save token
           this.auth.saveToken(response.token);
-          // and redirect
-          this.router.navigate(['/']); 
+
+          // Check role and redirect accordingly
+          const role = this.auth.getUserRole();
+          if (role === 'ADMIN') {
+            this.router.navigate(['/admin/dashboard']);
+          } else {
+            this.router.navigate(['/']); 
+          }
         },
         error: (err) => {
-          // if NOT (401, 403) -> display error message
           this.errorMessage = 'Credentials incorrect or server is not joinable.';
           console.error('Connexion error:', err);
         }

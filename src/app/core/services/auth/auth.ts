@@ -51,4 +51,16 @@ export class Auth {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`,credentials);
   }
 
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      // Split the token, decode the payload, parse the JSON, and grab the role
+      return JSON.parse(atob(token.split('.')[1])).role || null;
+    } catch {
+      return null;
+    }
+  }
+
 }
