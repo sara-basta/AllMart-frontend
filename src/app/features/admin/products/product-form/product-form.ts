@@ -8,6 +8,7 @@ import { Category } from '../../../../core/services/category/category';
 import { CategoryResponse } from '../../../../core/models/product/category-response.model';
 import { ProductRequest } from '../../../../core/models/product/product-request.model';
 import { ProductResponse } from '../../../../core/models/product/product-response.model';
+import { Cloudinary } from '../../../../core/services/cloudinary/cloudinary';
 
 @Component({
   selector: 'app-product-form',
@@ -26,6 +27,10 @@ export class ProductForm {
   productId = signal<number | null>(null);
   categories = signal<CategoryResponse[]>([]);
   isSubmitting = signal(false);
+
+  private cloudinary = inject(Cloudinary);
+  isUploading = signal(false);
+  previewUrl = signal<string | null>(null);
 
   productForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -68,6 +73,10 @@ export class ProductForm {
           categoryId: categoryIdToSelect, 
           imageUrl: product.imageUrl
         });
+
+        if (product.imageUrl) {
+          this.previewUrl.set(product.imageUrl);
+        }
 
         // LOCK DOWN THE NON-EDITABLE FIELDS
         if (this.isEditMode()) {
@@ -115,6 +124,26 @@ export class ProductForm {
         error: (err) => { 
           console.error('Failed to create product', err); 
           this.isSubmitting.set(false); 
+        }
+      });
+    }
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.isUploading.set(true);
+      
+      this.cloudinary.uploadImage(file).subscribe({
+        next: (url: string) => {
+          this.productForm.patchValue({ imageUrl: url });
+          this.previewUrl.set(url);
+          this.isUploading.set(false);
+          console.log('Image uploaded to backend successfully:', url);
+        },
+        error: (err) => {
+          console.error('Backend upload failed', err);
+          this.isUploading.set(false);
         }
       });
     }

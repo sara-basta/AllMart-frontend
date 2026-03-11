@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { UserResponse } from '../../models/user/user-response.model';
 import { Observable } from 'rxjs';
+import { PaginatedResponse } from '../../models/paginated-response.model';
+import { UserRequest } from '../../models/user/user-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +18,22 @@ export class User {
 
   getCurrentUser(): Observable<UserResponse>{
     return this.http.get<UserResponse>(`${this.apiUrl}/profile`);
+  }
+
+  getUsers(id?: number, page: number = 0, size: number = 10): Observable<PaginatedResponse<UserResponse>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (id) {
+      params = params.set('id', id.toString());
+    }
+
+    return this.http.get<PaginatedResponse<UserResponse>>(this.apiUrl, { params });
+  }
+
+  createUser(userData: UserRequest): Observable<UserResponse> {
+    return this.http.post<UserResponse>(this.apiUrl, userData);
   }
 
   fetchAndSaveProfile() {

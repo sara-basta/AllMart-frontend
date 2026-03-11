@@ -16,6 +16,10 @@ import { WishlistPage } from './features/wishlist-page/wishlist-page';
 import { AdminDashboard } from './features/admin/admin-dashboard/admin-dashboard';
 import { Products } from './features/admin/products/products';
 import { ProductForm } from './features/admin/products/product-form/product-form';
+import { Categories } from './features/admin/categories/categories';
+import { Users } from './features/admin/users/users';
+import { Orders } from './features/admin/orders/orders';
+
 
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard]},
@@ -45,9 +49,9 @@ export const routes: Routes = [
         { path: 'products', component: Products },
         { path: 'products/new', component: ProductForm },
         { path: 'products/:id', component: ProductForm },
-        // { path: 'categories', component: Categories },
-        // { path: 'orders', component: Orders },
-        // { path: 'users', component: Users },
+        { path: 'categories', component: Categories },
+        { path: 'orders', component: Orders },
+        { path: 'users', component: Users },
         ]
     },
     { path: '**', redirectTo: '' }

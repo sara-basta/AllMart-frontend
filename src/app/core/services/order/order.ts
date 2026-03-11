@@ -38,4 +38,24 @@ export class Order {
   cancelOrder(orderId: number): Observable<OrderResponse> {
         return this.http.post<OrderResponse>(`${this.ordersApi}/${orderId}/cancel`, null);
   }
+
+  // --- NEW ADMIN METHODS ---
+  
+  // 1. Global Order Lookup
+  getOrderById(id: number): Observable<OrderResponse> {
+    return this.http.get<OrderResponse>(`${this.ordersApi}/${id}`);
+  }
+
+  // 2. User-Specific Order History
+  getOrdersByUser(userId: number): Observable<OrderResponse[]> {
+    return this.http.get<OrderResponse[]>(`${this.ordersApi}/user/${userId}`);
+  }
+
+  // 3. Status Management (Assuming backend expects a simple string or JSON object)
+  updateOrderStatus(id: number, status: string): Observable<OrderResponse> {
+    // The key MUST be "status" to map correctly to your Java OrderStatusRequest record
+    const payload = { status: status }; 
+    
+    return this.http.patch<OrderResponse>(`${this.ordersApi}/${id}/status`, payload);
+  }
 }

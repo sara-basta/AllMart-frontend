@@ -1,4 +1,44 @@
-<div class="bg-white p-8 border border-slate-100 shadow-sm">
-  <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Welcome to the Admin Dashboard</h2>
-  <p class="text-sm text-slate-500 font-bold tracking-widest uppercase">System Status: <span class="text-green-500">Online</span></p>
+<div class="space-y-8">
+  <div class="bg-white p-8 border border-slate-100 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div>
+      <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-2">AllMart Control Center</h2>
+      <p class="text-[10px] text-slate-500 font-bold tracking-widest uppercase">System Status: <span class="text-green-500">Online</span></p>
+    </div>
+    <div class="text-left md:text-right border-l-4 border-slate-900 pl-4 md:border-none md:pl-0">
+      <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Current Date</p>
+      <p class="text-sm font-black text-slate-900 uppercase tracking-tighter">{{ currentDate | date:'longDate' }}</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-slate-900 p-8 border border-slate-900 text-white shadow-lg">
+      <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Inventory Size</h3>
+      <p class="text-4xl font-black tracking-tighter">{{ metrics().totalProducts }}</p>
+      <p class="text-[9px] text-slate-500 uppercase tracking-widest mt-2">Total Items in Catalog</p>
+    </div>
+    
+    <div class="bg-white p-8 border-4 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
+      <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Registered Users</h3>
+      <p class="text-4xl font-black text-slate-900 tracking-tighter">{{ metrics().totalUsers }}</p>
+      <p class="text-[9px] text-slate-400 uppercase tracking-widest mt-2">Active Accounts</p>
+    </div>
+  </div>
+
+  <div class="bg-white p-8 border border-slate-100 shadow-sm">
+    <h3 class="text-[10px] font-bold text-slate-900 uppercase tracking-widest mb-6">Quick Actions</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <a routerLink="/admin/orders" class="block text-center border-2 border-slate-100 p-6 hover:border-slate-900 hover:bg-slate-900 transition-colors cursor-pointer bg-slate-50 group">
+        <span class="block text-xs font-black text-slate-900 group-hover:text-white uppercase tracking-widest">Manage Orders</span>
+      </a>
+      <a routerLink="/admin/products" class="block text-center border-2 border-slate-100 p-6 hover:border-slate-900 hover:bg-slate-900 transition-colors cursor-pointer bg-slate-50 group">
+        <span class="block text-xs font-black text-slate-900 group-hover:text-white uppercase tracking-widest">Inventory</span>
+      </a>
+      <a routerLink="/admin/users" class="block text-center border-2 border-slate-100 p-6 hover:border-slate-900 hover:bg-slate-900 transition-colors cursor-pointer bg-slate-50 group">
+        <span class="block text-xs font-black text-slate-900 group-hover:text-white uppercase tracking-widest">User Directory</span>
+      </a>
+      <a routerLink="/admin/categories" class="block text-center border-2 border-slate-100 p-6 hover:border-slate-900 hover:bg-slate-900 transition-colors cursor-pointer bg-slate-50 group">
+        <span class="block text-xs font-black text-slate-900 group-hover:text-white uppercase tracking-widest">Categories</span>
+      </a>
+    </div>
+  </div>
 </div>
