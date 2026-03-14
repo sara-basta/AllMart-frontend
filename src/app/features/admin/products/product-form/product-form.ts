@@ -60,7 +60,7 @@ export class ProductForm {
   }
 
   loadProductData(id: number, loadedCategories: CategoryResponse[]) {
-    this.product.getProductById(id).subscribe({
+    this.product.getAdminProductById(id).subscribe({
       next: (product: ProductResponse) => {
         const matchedCategory = loadedCategories.find(c => c.name === product.categoryName);
         const categoryIdToSelect = matchedCategory ? matchedCategory.id : null;

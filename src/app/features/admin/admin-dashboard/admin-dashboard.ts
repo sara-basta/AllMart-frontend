@@ -11,8 +11,8 @@ import { Product } from '../../../core/services/product/product';
 })
 export class AdminDashboard implements OnInit{
 
-  private userService = inject(User);
-  private productService = inject(Product);
+  private user = inject(User);
+  private product = inject(Product);
 
   currentDate = new Date();
   
@@ -22,19 +22,15 @@ export class AdminDashboard implements OnInit{
   });
 
   ngOnInit() {
-    // Fetch Total Users
-    this.userService.getUsers(undefined, 0, 1).subscribe({
+    this.user.getUsers(undefined, 0, 1).subscribe({
       next: (res: any) => {
-        // Use res.page.totalElements based on your console log
         this.metrics.update(m => ({ ...m, totalUsers: res.page?.totalElements || 0 }));
       },
       error: (err) => console.error('User count fetch failed', err)
     });
 
-    // Fetch Total Products
-    this.productService.getAdminProducts(0, 1).subscribe({
+    this.product.getAdminProducts(0, 1).subscribe({
       next: (res: any) => {
-        // Use res.page.totalElements based on your console log
         this.metrics.update(m => ({ ...m, totalProducts: res.page?.totalElements || 0 }));
       },
       error: (err) => console.error('Product count fetch failed', err)

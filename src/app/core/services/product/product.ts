@@ -22,6 +22,10 @@ export class Product {
     return this.http.get<ProductResponse>(`${this.apiUrl}/${id}`);
   }
 
+  getAdminProductById(id: number): Observable<ProductResponse> {
+    return this.http.get<ProductResponse>(`${this.apiUrl}/admin/${id}`);
+  }
+
   searchProduct(name?: string, categoryId?: number, minPrice?: number, maxPrice?: number): Observable<PaginatedResponse<ProductResponse>> {
   let params = new HttpParams();
 

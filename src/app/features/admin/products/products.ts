@@ -26,13 +26,12 @@ export class Products {
   loadProducts(page: number = 0) {
     this.isLoading.set(true);
     this.product.getAdminProducts(page, 10).subscribe({
-      next: (res: PaginatedResponse<ProductResponse> ) => {
-        // if content is undefined then give it an empty array
+      next: (res: any) => {
         this.products.set(res.content || []);
 
-        this.currentPage.set(res.number);
-        this.totalPages.set(res.totalPages);
-        this.totalElements.set(res.totalElements);
+        this.currentPage.set(res.page?.number || 0);
+        this.totalPages.set(res.page?.totalPages || 0);
+        this.totalElements.set(res.page?.totalElements || 0);
         
         this.isLoading.set(false);
       },
