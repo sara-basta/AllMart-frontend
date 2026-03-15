@@ -18,7 +18,7 @@
              [class.bg-transparent]="activeTab() !== 'profile'"
              [class.text-slate-900]="activeTab() !== 'profile'"
              [class.border-slate-200]="activeTab() !== 'profile'"
-             class="w-full border px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 focus:outline-none transition-colors cursor-pointer text-center block">
+             class="w-full border px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 transition-colors cursor-pointer text-center block">
             Profile & Data
           </a>
 
@@ -29,7 +29,7 @@
              [class.bg-transparent]="activeTab() !== 'orders'"
              [class.text-slate-900]="activeTab() !== 'orders'"
              [class.border-slate-200]="activeTab() !== 'orders'"
-             class="w-full border px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 focus:outline-none transition-colors cursor-pointer text-center block">
+             class="w-full border px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 transition-colors cursor-pointer text-center block">
             Order History
           </a>
         </nav>
@@ -50,23 +50,23 @@
               }
             </div>
 
-            @if (user.currentUserSignal()) {
+            @if (user.currentUserSignal(); as currentUser) {
               @if (isEditingProfile()) {
                 <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-slate-200 p-6 bg-slate-50">
                   <div class="space-y-2">
                     <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">First Name</label>
-                    <input type="text" formControlName="firstName" class="w-full p-3 bg-white border border-slate-200 text-sm focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-colors">
+                    <input type="text" formControlName="firstName" class="w-full p-3 bg-white border border-slate-200 text-sm focus:outline-none focus:border-slate-900 transition-colors">
                   </div>
                   <div class="space-y-2">
                     <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">Last Name</label>
-                    <input type="text" formControlName="lastName" class="w-full p-3 bg-white border border-slate-200 text-sm focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-colors">
+                    <input type="text" formControlName="lastName" class="w-full p-3 bg-white border border-slate-200 text-sm focus:outline-none focus:border-slate-900 transition-colors">
                   </div>
                   <div class="md:col-span-2 space-y-2 opacity-50">
                     <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">Email Address</label>
-                    <input type="text" [value]="user.currentUserSignal()?.email" disabled class="w-full p-3 bg-slate-100 border border-slate-200 text-sm cursor-not-allowed">
+                    <input type="text" [value]="currentUser.email" disabled class="w-full p-3 bg-slate-100 border border-slate-200 text-sm cursor-not-allowed">
                   </div>
                   <div class="md:col-span-2 flex justify-end gap-4 mt-4 pt-4 border-t border-slate-200">
-                    <button type="button" (click)="toggleEditProfile()" class="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors cursor-pointer bg-transparent border-none">Cancel</button>
+                    <button type="button" (click)="toggleEditProfile()" class="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 cursor-pointer bg-transparent border-none">Cancel</button>
                     <button type="submit" [disabled]="profileForm.invalid || isSavingProfile()" class="bg-slate-900 text-white px-6 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors cursor-pointer border-none disabled:opacity-50">
                       {{ isSavingProfile() ? 'Saving...' : 'Save Changes' }}
                     </button>
@@ -76,15 +76,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">First Name</p>
-                    <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ user.currentUserSignal()?.firstName }}</p>
+                    <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ currentUser.firstName }}</p>
                   </div>
                   <div class="border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Last Name</p>
-                    <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ user.currentUserSignal()?.lastName }}</p>
+                    <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ currentUser.lastName }}</p>
                   </div>
                   <div class="md:col-span-2 border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Email Address</p>
-                    <p class="text-sm font-bold text-slate-900 tracking-tight">{{ user.currentUserSignal()?.email }}</p>
+                    <p class="text-sm font-bold text-slate-900 tracking-tight">{{ currentUser.email }}</p>
                   </div>
                 </div>
               }
@@ -97,7 +97,7 @@
               <a routerLink="/profile/address" class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest hover:text-slate-500 transition-colors cursor-pointer">Add New &rarr;</a>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              @for (address of userAddresses(); track address.id) {
+              @for (address of (userAddresses() || []); track address.id) {
                 @if (editingAddressId() === address.id) {
                   <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="relative bg-white border-2 border-slate-900 p-6 shadow-md">
                     <div class="space-y-3 mb-4">
@@ -132,10 +132,12 @@
         <section>
           @if (selectedOrder(); as order) {
             <div class="animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <button (click)="backToHistory()" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-colors bg-transparent border-none cursor-pointer mb-8">
+                &larr; Back to History
+              </button>
+
               <div class="flex items-center justify-between mb-8">
-                <button (click)="backToHistory()" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-colors bg-transparent border-none cursor-pointer">
-                  &larr; Back to History
-                </button>
+                <h2 class="text-xl font-black text-slate-900 uppercase">Order #{{ order.id }}</h2>
                 <span class="px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest bg-slate-900 text-white border border-slate-900">{{ order.status }}</span>
               </div>
 
@@ -143,24 +145,18 @@
                 <div class="border border-slate-200 p-6 bg-slate-50">
                   <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Shipping To</p>
                   <p class="text-sm font-bold text-slate-900 uppercase">{{ order.shippingCity }}</p>
-                  <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Verified shipping destination</p>
                 </div>
                 <div class="border border-slate-200 p-6 bg-slate-900 text-white">
-                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Total Amount</p>
-                  <div class="flex justify-between items-baseline">
-                    <span class="text-2xl font-black">{{ order.totalAmount }} MAD</span>
-                    <span class="text-[10px] font-bold uppercase text-slate-400">#{{ order.id }}</span>
-                  </div>
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 text-slate-400">Total Amount</p>
+                  <span class="text-2xl font-black">{{ order.totalAmount }} MAD</span>
                 </div>
               </div>
 
               <div class="border border-slate-200 bg-white">
-                <div class="bg-slate-50 px-6 py-3 border-b border-slate-200">
-                  <span class="text-[10px] font-bold text-slate-900 uppercase tracking-widest">Items Purchased</span>
-                </div>
+                <div class="bg-slate-50 px-6 py-3 border-b border-slate-200 text-[10px] font-bold text-slate-900 uppercase tracking-widest">Items Purchased</div>
                 <div class="divide-y divide-slate-100">
                   @for (item of order.items; track item.id) {
-                    <div class="p-6 flex justify-between items-center hover:bg-slate-50 transition-colors">
+                    <div class="p-6 flex justify-between items-center">
                       <div>
                         <p class="text-sm font-bold text-slate-900 uppercase">{{ item.productName }}</p>
                         <p class="text-[10px] font-bold text-slate-400 uppercase">{{ item.quantity }} x {{ item.unitPrice }} MAD</p>
@@ -175,7 +171,7 @@
           } @else {
             <div class="flex items-end justify-between mb-8">
               <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Order History</h2>
-              <span class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest">{{ orders().length }} Records</span>
+              <span class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest">{{ totalElements() }} Records</span>
             </div>
 
             <div class="flex flex-col gap-3">
@@ -186,7 +182,7 @@
                 <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">Total Amount</span>
               </div>
 
-              @for (order of orders(); track order.id) {
+              @for (order of (orders() || []); track order.id) {
                 <div (click)="viewOrderDetails(order.id)" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center bg-white border-2 border-slate-100 p-6 hover:border-slate-900 transition-all group cursor-pointer">
                   <span class="text-sm font-black text-slate-900">#{{ order.id }}</span>
                   <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ order.orderDate | date:'MMM d, yyyy' }}</span>
@@ -200,12 +196,44 @@
                   </div>
                   <div class="flex items-center justify-end gap-4">
                     <span class="text-sm font-black text-slate-900">{{ order.totalAmount }} MAD</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-slate-300 group-hover:text-slate-900 transition-colors hidden md:block"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-slate-300 group-hover:text-slate-900 transition-colors hidden md:block">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
                   </div>
                 </div>
               }
-            </div>
-          }
+
+              @if (!isLoadingOrders() && totalElements() === 0) {
+                <div class="py-20 text-center border-2 border-dashed border-slate-100">
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">No order records found</p>
+                  <a routerLink="/catalog" class="text-[10px] font-black uppercase underline underline-offset-4 text-slate-900">Start Shopping</a>
+                </div>
+              }
+
+              @if (totalPages() > 1) {
+                <div class="mt-8 pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    Showing Page <span class="text-slate-900">{{ currentPage() + 1 }}</span> of <span class="text-slate-900">{{ totalPages() }}</span>
+                  </p>
+                  
+                  <div class="flex gap-3">
+                    <button 
+                      (click)="prevPage()" 
+                      [disabled]="currentPage() === 0"
+                      class="px-6 py-2.5 border border-slate-200 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-transparent cursor-pointer">
+                      Previous
+                    </button>
+                    
+                    <button 
+                      (click)="nextPage()" 
+                      [disabled]="currentPage() >= totalPages() - 1"
+                      class="px-6 py-2.5 border border-slate-200 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-transparent cursor-pointer">
+                      Next
+                    </button>
+                  </div>
+                </div>
+              }
+            </div> }
         </section>
       }
 

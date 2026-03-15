@@ -17,9 +17,6 @@
       <div>
         <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest mb-2">Product Name</label>
         <input type="text" formControlName="name" class="w-full border-2 border-slate-100 p-3 text-sm focus:border-slate-900 focus:outline-none transition-colors bg-slate-50 focus:bg-white">
-        @if (productForm.get('name')?.touched && productForm.get('name')?.invalid) {
-          <span class="text-[10px] font-bold text-red-500 uppercase tracking-widest mt-1 block">Name is required</span>
-        }
       </div>
 
       <div>
@@ -40,8 +37,9 @@
       </div>
 
       <div>
-        <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest mb-2">Initial Stock</label>
-        <input type="number" formControlName="stockQuantity" class="w-full border-2 border-slate-100 p-3 text-sm focus:border-slate-900 focus:outline-none transition-colors bg-slate-50 focus:bg-white">      </div>
+        <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest mb-2">Stock Quantity</label>
+        <input type="number" formControlName="stockQuantity" class="w-full border-2 border-slate-100 p-3 text-sm focus:border-slate-900 focus:outline-none transition-colors bg-slate-50 focus:bg-white">
+      </div>
     </div>
 
     <div>
@@ -50,52 +48,37 @@
     </div>
 
     <div class="space-y-4">
-  <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">Product Image</label>
-  
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-    <div (click)="!isEditMode() && fileInput.click()" 
-         [class.cursor-not-allowed]="isEditMode()"
-         [class.opacity-50]="isEditMode()"
-         class="aspect-square border-2 border-slate-100 flex flex-col items-center justify-center cursor-pointer hover:border-slate-900 transition-colors bg-slate-50 relative overflow-hidden group">
+      <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">Product Image</label>
       
-      @if (previewUrl()) {
-        <img [src]="previewUrl()" class="absolute inset-0 w-full h-full object-cover">
-        @if (!isEditMode()) {
-          <div class="absolute inset-0 bg-slate-900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <span class="text-white text-[10px] font-bold uppercase tracking-widest">Change Image</span>
-          </div>
-        }
-      } @else {
-        <div class="text-center p-4">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mx-auto mb-2 text-slate-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l1.409 1.409m-20.93 4.5H2.25A2.25 2.25 0 010 18.75V10.5a2.25 2.25 0 012.25-2.25h15.75c1.242 0 2.25 1.008 2.25 2.25v8.25a2.25 2.25 0 01-2.25 2.25h-15.75z" />
-          </svg>
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            {{ isUploading() ? 'Uploading...' : 'Click to Upload' }}
-          </span>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        <div (click)="fileInput.click()" 
+             class="aspect-square border-2 border-slate-100 flex flex-col items-center justify-center cursor-pointer hover:border-slate-900 transition-colors bg-slate-50 relative overflow-hidden group">
+          
+          @if (previewUrl()) {
+            <img [src]="previewUrl()" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-slate-900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <span class="text-white text-[10px] font-bold uppercase tracking-widest">Change Image</span>
+            </div>
+          } @else {
+            <div class="text-center p-4">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                {{ isUploading() ? 'Uploading...' : 'Click to Upload' }}
+              </span>
+            </div>
+          }
         </div>
-      }
-    </div>
 
-    <div class="space-y-4">
-      <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
-        Requirements:
-      </p>
-      <ul class="text-[9px] text-slate-400 uppercase tracking-widest space-y-1 list-disc pl-4">
-        <li>Square aspect ratio preferred</li>
-        <li>Max size 5MB</li>
-        <li>JPG or PNG format</li>
-      </ul>
-      @if (isEditMode()) {
-        <p class="text-[9px] text-amber-600 font-bold uppercase tracking-widest">
-          Note: Image cannot be changed in edit mode.
-        </p>
-      }
-    </div>
+        <div class="space-y-4">
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Requirements:</p>
+          <ul class="text-[9px] text-slate-400 uppercase tracking-widest space-y-1 list-disc pl-4">
+            <li>Square aspect ratio preferred</li>
+            <li>Max size 5MB</li>
+          </ul>
+        </div>
 
-    <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" class="hidden">
-  </div>
-</div>
+        <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" class="hidden">
+      </div>
+    </div>
 
     <div class="pt-6 border-t border-slate-100 flex justify-end">
       <button type="submit" [disabled]="isSubmitting() || productForm.invalid" class="bg-slate-900 text-white px-8 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors disabled:opacity-50 cursor-pointer">

@@ -2,7 +2,6 @@ import { Component, inject, signal } from '@angular/core';
 import { Product } from '../../../core/services/product/product';
 import { ProductResponse } from '../../../core/models/product/product-response.model';
 import { RouterLink } from '@angular/router';
-import { PaginatedResponse } from '../../../core/models/paginated-response.model';
 
 @Component({
   selector: 'app-products',

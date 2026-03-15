@@ -57,15 +57,7 @@ export class Product {
     return this.http.post<ProductResponse>(this.apiUrl, productData);
   }
 
-  updateProductPrice(id: number, price: number): Observable<ProductResponse> {
-    return this.http.patch<ProductResponse>(`${this.apiUrl}/${id}/price`, { price: price }); 
-  }
-
-  updateProductStock(id: number, stockQuantity: number): Observable<ProductResponse> {
-    return this.http.patch<ProductResponse>(`${this.apiUrl}/${id}/stock`, { stock: stockQuantity });
-  }
-
-  updateProductCategory(id: number, categoryId: number): Observable<ProductResponse> {
-    return this.http.patch<ProductResponse>(`${this.apiUrl}/${id}/category`, { categoryId: categoryId });
+  updateProduct(id: number, productData: any): Observable<ProductResponse> {
+    return this.http.put<ProductResponse>(`${this.apiUrl}/${id}`, productData);
   }
 }

@@ -19,11 +19,19 @@ import { ProductForm } from './features/admin/products/product-form/product-form
 import { Categories } from './features/admin/categories/categories';
 import { Users } from './features/admin/users/users';
 import { Orders } from './features/admin/orders/orders';
+import { Shipping } from './features/static/shipping/shipping';
+import { Privacy } from './features/static/privacy/privacy';
+import { Terms } from './features/static/terms/terms';
 
 
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard]},
     { path: 'register', component: Register, canActivate: [guestGuard] },
+
+    { path: 'shipping', component: Shipping },
+    { path: 'privacy', component: Privacy },
+    { path: 'terms', component: Terms },
+
     {
         path: '',
         component: MainLayout,

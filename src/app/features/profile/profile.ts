@@ -33,6 +33,11 @@ export class Profile implements OnInit{
   selectedOrder = signal<OrderResponse | null>(null);
   isLoadingDetail = signal(false);
 
+  currentPage = signal<number>(0);
+  totalPages = signal<number>(0);
+  totalElements = signal<number>(0);
+  pageSize = 10;
+
 
   constructor() {
     this.profileForm = this.fb.group({
@@ -49,7 +54,7 @@ export class Profile implements OnInit{
 
   ngOnInit() {
     this.address.loadMyAddresses();
-    this.loadOrderHistory();
+    this.loadOrderHistory(this.currentPage());
   }
 
   removeAddress(id: number) {
@@ -85,10 +90,14 @@ export class Profile implements OnInit{
     });
   }
 
-  loadOrderHistory() {
-    this.order.getHistory().subscribe({
-      next: (data) => {
-        this.orders.set(data);
+  loadOrderHistory(page: number = 0) {
+    this.isLoadingOrders.set(true);
+    this.order.getHistory(page, this.pageSize).subscribe({
+      next: (res: any) => {
+        this.orders.set(res.content); 
+        this.totalPages.set(res.page.totalPages);
+        this.totalElements.set(res.page.totalElements);
+        this.currentPage.set(res.page.number);
         this.isLoadingOrders.set(false);
       },
       error: (err) => {
@@ -96,6 +105,18 @@ export class Profile implements OnInit{
         this.isLoadingOrders.set(false);
       }
     });
+  }
+
+  nextPage() {
+    if (this.currentPage() < this.totalPages() - 1) {
+      this.loadOrderHistory(this.currentPage() + 1);
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage() > 0) {
+      this.loadOrderHistory(this.currentPage() - 1);
+    }
   }
 
   onCancelOrder(orderId: number) {

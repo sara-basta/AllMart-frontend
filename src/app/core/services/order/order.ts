@@ -32,9 +32,9 @@ export class Order {
     });
   }
 
-  getHistory(): Observable<OrderResponse[]> {
-    return this.http.get<OrderResponse[]>(`${this.ordersApi}/my-orders`);
-  }
+  getHistory(page: number = 0, size: number = 10): Observable<any> {
+  return this.http.get<any>(`${this.ordersApi}/my-orders?page=${page}&size=${size}`);
+}
 
   createOrder(request: { productId: number; addressId: number }): Observable<OrderResponse> {
     return this.http.post<OrderResponse>(this.ordersApi, request);

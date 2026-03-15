@@ -77,13 +77,6 @@ export class ProductForm {
         if (product.imageUrl) {
           this.previewUrl.set(product.imageUrl);
         }
-
-        // LOCK DOWN THE NON-EDITABLE FIELDS
-        if (this.isEditMode()) {
-          this.productForm.get('name')?.disable();
-          this.productForm.get('description')?.disable();
-          this.productForm.get('imageUrl')?.disable();
-        }
       },
       error: (err) => console.error('Failed to fetch product', err)
     });
@@ -97,28 +90,19 @@ export class ProductForm {
 
     this.isSubmitting.set(true);
     
-    // .getRawValue() is used because some fields are disabled during edit
-    const formData = this.productForm.getRawValue(); 
+    const requestData = this.productForm.value as ProductRequest;
 
     if (this.isEditMode() && this.productId()) {
-      const id = this.productId()!;
       
-      forkJoin([
-        this.product.updateProductPrice(id, formData.price!),
-        this.product.updateProductStock(id, formData.stockQuantity!),
-        this.product.updateProductCategory(id, formData.categoryId!)
-      ]).subscribe({
+      this.product.updateProduct(this.productId()!, requestData).subscribe({
         next: () => this.router.navigate(['/admin/products']),
         error: (err) => { 
-          console.error('Failed to update product details', err); 
+          console.error('Update failed', err); 
           this.isSubmitting.set(false); 
         }
       });
       
     } else {
-      // Cast the raw value to ProductRequest to satisfy the service type
-      const requestData = formData as ProductRequest;
-
       this.product.createProduct(requestData).subscribe({
         next: () => this.router.navigate(['/admin/products']),
         error: (err) => { 
@@ -139,10 +123,9 @@ export class ProductForm {
           this.productForm.patchValue({ imageUrl: url });
           this.previewUrl.set(url);
           this.isUploading.set(false);
-          console.log('Image uploaded to backend successfully:', url);
         },
         error: (err) => {
-          console.error('Backend upload failed', err);
+          console.error('Upload failed', err);
           this.isUploading.set(false);
         }
       });
