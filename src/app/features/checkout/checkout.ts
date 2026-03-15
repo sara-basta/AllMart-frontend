@@ -20,10 +20,16 @@ export class Checkout implements OnInit{
   private route = inject(ActivatedRoute);
 
   userAddresses = this.address.userAddresses;
+
   selectedAddressId = signal<number | null>(null);
   selectedPayment = signal<'CASH_ON_DELIVERY' | 'CREDIT_CARD' | null>(null);
   buyNowProductId = signal<number | null>(null);
   cardNumber = signal<string>('');
+
+  isCreatingNewAddress = signal<boolean>(false);
+  newStreet = signal<string>('');
+  newCity = signal<string>('');
+  newZipCode = signal<string>('');
 
   ngOnInit() {
     this.address.loadMyAddresses();
@@ -35,24 +41,60 @@ export class Checkout implements OnInit{
     });
   }
 
+  toggleNewAddress(state: boolean) {
+    this.isCreatingNewAddress.set(state);
+    if (state) {
+      this.selectedAddressId.set(null);
+    }
+  }
+
+  selectSavedAddress(id: number) {
+    this.selectedAddressId.set(id);
+    this.isCreatingNewAddress.set(false); 
+  }
+
   confirmOrder() {
   const addressId = this.selectedAddressId();
   const paymentMethod = this.selectedPayment();
   const productId = this.buyNowProductId();
+  const isNew = this.isCreatingNewAddress();
 
-  if (!addressId || !paymentMethod) return;
-  if (paymentMethod === 'CREDIT_CARD' && !this.cardNumber()) {
-    alert("Please enter a valid card number.");
-    return;
-  }
+  if (!addressId && !isNew) {
+      alert("Please select or enter a shipping address.");
+      return;
+    }
+    if (isNew && (!this.newStreet() || !this.newCity() || !this.newZipCode())) {
+      alert("Please fill out all fields for the new address.");
+      return;
+    }
+    if (!paymentMethod) {
+      alert("Please select a payment method.");
+      return;
+    }
+    if (paymentMethod === 'CREDIT_CARD' && !this.cardNumber()) {
+      alert("Please enter a valid card number.");
+      return;
+    }
 
-  if (productId) {
-    this.order.createOrder({ productId, addressId }).subscribe({
-      next: (res) => this.executePayment(Number(res.id), paymentMethod),
-      error: (err) => console.error('Buy Now failed:', err)
-    });
+    const newAddressObj = isNew ? {
+      street: this.newStreet(),
+      city: this.newCity(),
+      zipCode: this.newZipCode()
+    } : undefined;
+
+    if (productId) {
+      // BUY NOW FLOW
+      if (isNew) {
+        alert("The 'Buy Now' feature requires a saved address. Please select one from your profile.");
+        return; 
+      }
+      this.order.createOrder({ productId, addressId: addressId! }).subscribe({
+        next: (res) => this.executePayment(Number(res.id), paymentMethod),
+        error: (err) => console.error('Buy Now failed:', err)
+      });
   } else {
-    this.order.checkoutFromCart(addressId).subscribe({
+    const idToSend = addressId ? addressId : undefined;
+    this.order.checkoutFromCart(idToSend, newAddressObj).subscribe({
       next: (res) => this.executePayment(Number(res), paymentMethod),
       error: (err) => console.error('Cart Checkout failed:', err)
     });

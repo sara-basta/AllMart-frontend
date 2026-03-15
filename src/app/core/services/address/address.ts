@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { UserAddress } from '../../models/user/user-address.model';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -36,6 +37,10 @@ export class Address {
         this.userAddresses.update(prev => [...prev, newAddress]);
       }
     });
+  }
+
+  updateAddress(addressId: number, data: { street: string; city: string; zipCode: string }): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/${addressId}`, data);
   }
 
 }

@@ -51,4 +51,8 @@ export class User {
   clearUser(): void {
    this.currentUserSignal.set(null);
   }
+
+  updateProfile(data: { firstName?: string, lastName?: string }): Observable<UserResponse> {
+    return this.http.patch<UserResponse>(`${this.apiUrl}/profile`, data);
+  }
 }

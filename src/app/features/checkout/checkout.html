@@ -14,34 +14,72 @@
           <a routerLink="/profile" class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors">Manage Addresses</a>
         </div>
 
-        @if (userAddresses().length > 0) {
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            @for (addr of userAddresses(); track addr.id) {
-              <div
-                (click)="selectedAddressId.set(addr.id)"
-                [class.border-slate-900]="selectedAddressId() === addr.id"
-                [class.border-slate-100]="selectedAddressId() !== addr.id"
-                class="group p-6 border-2 cursor-pointer transition-all hover:bg-slate-50 relative">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          @for (addr of userAddresses(); track addr.id) {
+            <div
+              (click)="selectSavedAddress(addr.id)"
+              [class.border-slate-900]="selectedAddressId() === addr.id"
+              [class.border-slate-100]="selectedAddressId() !== addr.id"
+              class="group p-6 border-2 cursor-pointer transition-all hover:bg-slate-50 relative">
 
-                @if (selectedAddressId() === addr.id) {
-                  <div class="absolute top-4 right-4 text-slate-900">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                    </svg>
-                  </div>
-                }
+              @if (selectedAddressId() === addr.id) {
+                <div class="absolute top-4 right-4 text-slate-900">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              }
 
-                <p class="text-xs font-black text-slate-900 uppercase mb-1">{{ addr.Street }}</p>
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">{{ addr.city }}, {{ addr.zipCode }}</p>
-              </div>
+              <p class="text-xs font-black text-slate-900 uppercase mb-1">{{ addr.Street }}</p>
+              <p class="text-[10px] font-bold text-slate-500 uppercase tracking-tight">{{ addr.city }}, {{ addr.zipCode }}</p>
+            </div>
+          }
+
+          <div
+            (click)="buyNowProductId() ? null : toggleNewAddress(true)"
+            [class.border-slate-900]="isCreatingNewAddress()"
+            [class.border-dashed]="!isCreatingNewAddress()"
+            [class.border-slate-200]="!isCreatingNewAddress()"
+            [class.opacity-50]="buyNowProductId()"
+            [class.cursor-not-allowed]="buyNowProductId()"
+            class="p-6 border-2 cursor-pointer transition-all hover:bg-slate-50 flex flex-col items-center justify-center text-center">
+            
+            <span class="text-xs font-black uppercase text-slate-900 mb-1">+ New Address</span>
+            @if (buyNowProductId()) {
+              <span class="text-[9px] font-bold text-red-500 uppercase tracking-widest">Not available for Buy Now</span>
+            } @else {
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Deliver to a different location</span>
             }
           </div>
-        } @else {
-          <div class="bg-slate-50 p-10 text-center border border-dashed border-slate-200">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">No addresses found</p>
-            <button routerLink="/profile" class="bg-slate-900 text-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all cursor-pointer border-none">
-              Add New Address
-            </button>
+
+        </div>
+
+        @if (isCreatingNewAddress()) {
+          <div class="mt-4 p-6 border-2 border-slate-900 bg-slate-50 space-y-4 transition-all">
+            <h4 class="text-[10px] font-bold uppercase tracking-widest text-slate-900 mb-2">Enter Address Details</h4>
+            
+            <div>
+              <input 
+                type="text" 
+                [(ngModel)]="newStreet" 
+                placeholder="Street Address" 
+                class="w-full border border-slate-200 px-5 py-4 text-xs font-bold tracking-widest focus:border-slate-900 focus:outline-none transition-colors rounded-none placeholder-slate-300 bg-white">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <input 
+                type="text" 
+                [(ngModel)]="newCity" 
+                placeholder="City" 
+                class="w-full border border-slate-200 px-5 py-4 text-xs font-bold tracking-widest focus:border-slate-900 focus:outline-none transition-colors rounded-none placeholder-slate-300 bg-white">
+              
+              <input 
+                type="text" 
+                [(ngModel)]="newZipCode" 
+                placeholder="Zip Code" 
+                class="w-full border border-slate-200 px-5 py-4 text-xs font-bold tracking-widest focus:border-slate-900 focus:outline-none transition-colors rounded-none placeholder-slate-300 bg-white">
+            </div>
           </div>
         }
       </section>
@@ -89,7 +127,7 @@
 
         <button
           (click)="confirmOrder()"
-          [disabled]="!selectedAddressId() || !selectedPayment()"
+          [disabled]="(!selectedAddressId() && !isCreatingNewAddress()) || !selectedPayment()"
           class="w-full bg-slate-900 text-white py-5 text-xs font-bold uppercase tracking-widest disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-800 transition-all cursor-pointer border-none shadow-sm active:translate-y-0.5">
           Confirm Order.
         </button>

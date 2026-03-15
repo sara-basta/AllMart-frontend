@@ -32,10 +32,6 @@
              class="w-full border px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 focus:outline-none transition-colors cursor-pointer text-center block">
             Order History
           </a>
-
-          <a class="w-full border border-slate-200 px-4 py-2.5 text-slate-900 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 focus:outline-none transition-colors cursor-pointer text-center block">
-            Settings
-          </a>
         </nav>
       </div>
     </aside>
@@ -44,100 +40,145 @@
 
       @if (activeTab() === 'profile') {
         <div class="flex flex-col gap-12">
-
           <section>
             <div class="flex items-end justify-between mb-6">
               <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Personal Details</h2>
-              <button class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest hover:text-slate-500 transition-colors cursor-pointer bg-transparent border-none">
-                Edit Profile &rarr;
-              </button>
+              @if (!isEditingProfile()) {
+                <button (click)="toggleEditProfile()" class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest hover:text-slate-500 transition-colors cursor-pointer bg-transparent border-none">
+                  Edit Profile &rarr;
+                </button>
+              }
             </div>
 
             @if (user.currentUserSignal()) {
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
-                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">First Name</p>
-                  <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ user.currentUserSignal()?.firstName }}</p>
+              @if (isEditingProfile()) {
+                <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-slate-200 p-6 bg-slate-50">
+                  <div class="space-y-2">
+                    <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">First Name</label>
+                    <input type="text" formControlName="firstName" class="w-full p-3 bg-white border border-slate-200 text-sm focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-colors">
+                  </div>
+                  <div class="space-y-2">
+                    <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">Last Name</label>
+                    <input type="text" formControlName="lastName" class="w-full p-3 bg-white border border-slate-200 text-sm focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-colors">
+                  </div>
+                  <div class="md:col-span-2 space-y-2 opacity-50">
+                    <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">Email Address</label>
+                    <input type="text" [value]="user.currentUserSignal()?.email" disabled class="w-full p-3 bg-slate-100 border border-slate-200 text-sm cursor-not-allowed">
+                  </div>
+                  <div class="md:col-span-2 flex justify-end gap-4 mt-4 pt-4 border-t border-slate-200">
+                    <button type="button" (click)="toggleEditProfile()" class="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors cursor-pointer bg-transparent border-none">Cancel</button>
+                    <button type="submit" [disabled]="profileForm.invalid || isSavingProfile()" class="bg-slate-900 text-white px-6 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors cursor-pointer border-none disabled:opacity-50">
+                      {{ isSavingProfile() ? 'Saving...' : 'Save Changes' }}
+                    </button>
+                  </div>
+                </form>
+              } @else {
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">First Name</p>
+                    <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ user.currentUserSignal()?.firstName }}</p>
+                  </div>
+                  <div class="border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Last Name</p>
+                    <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ user.currentUserSignal()?.lastName }}</p>
+                  </div>
+                  <div class="md:col-span-2 border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Email Address</p>
+                    <p class="text-sm font-bold text-slate-900 tracking-tight">{{ user.currentUserSignal()?.email }}</p>
+                  </div>
                 </div>
-                <div class="border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
-                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Last Name</p>
-                  <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ user.currentUserSignal()?.lastName }}</p>
-                </div>
-                <div class="md:col-span-2 border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
-                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Email Address</p>
-                  <p class="text-sm font-bold text-slate-900 tracking-tight">{{ user.currentUserSignal()?.email }}</p>
-                </div>
-              </div>
-            } @else {
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-pulse">
-                <div class="h-20 bg-slate-100 border border-slate-200"></div>
-                <div class="h-20 bg-slate-100 border border-slate-200"></div>
-                <div class="md:col-span-2 h-20 bg-slate-100 border border-slate-200"></div>
-              </div>
+              }
             }
           </section>
 
           <section class="border-t border-slate-100 pt-10">
             <div class="flex items-end justify-between mb-6">
               <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Saved Addresses</h2>
-              <a routerLink="/profile/address" class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest hover:text-slate-500 transition-colors cursor-pointer">
-                Add New &rarr;
-              </a>
+              <a routerLink="/profile/address" class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest hover:text-slate-500 transition-colors cursor-pointer">Add New &rarr;</a>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               @for (address of userAddresses(); track address.id) {
-                <div class="relative bg-white border-2 border-slate-200 p-6 overflow-hidden group hover:border-slate-900 transition-colors">
-                  <h3 class="text-base font-bold text-slate-900 mb-1 uppercase">{{ address.Street }}</h3>
-                  <span class="text-slate-500 text-[10px] font-bold flex items-center gap-2 transition-all uppercase tracking-widest">
-                    {{ address.city }}, {{ address.zipCode }}
-                  </span>
-
-                  <button
-                    (click)="removeAddress(address.id)"
-                    class="mt-5 text-[10px] font-bold uppercase tracking-widest text-slate-900 underline underline-offset-4 hover:text-slate-500 transition-colors cursor-pointer bg-transparent border-none p-0">
-                    Remove Address
-                  </button>
-                </div>
-              } @empty {
-                <div class="col-span-full py-16 text-center border border-slate-100 flex flex-col items-center justify-center bg-slate-50">
-                  <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">No addresses found matching your account.</p>
-                  <button routerLink="/profile/address" class="bg-slate-900 text-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors cursor-pointer shadow-sm border-none">
-                    Add Address Now
-                  </button>
-                </div>
+                @if (editingAddressId() === address.id) {
+                  <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="relative bg-white border-2 border-slate-900 p-6 shadow-md">
+                    <div class="space-y-3 mb-4">
+                      <input type="text" formControlName="street" class="w-full p-2 bg-slate-50 border border-slate-200 text-xs focus:border-slate-900 focus:outline-none" placeholder="Street Address">
+                      <div class="flex gap-2">
+                        <input type="text" formControlName="city" class="w-full p-2 bg-slate-50 border border-slate-200 text-xs focus:border-slate-900 focus:outline-none" placeholder="City">
+                        <input type="text" formControlName="zipCode" class="w-1/3 p-2 bg-slate-50 border border-slate-200 text-xs focus:border-slate-900 focus:outline-none" placeholder="Zip">
+                      </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100">
+                      <button type="button" (click)="cancelEditAddress()" class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 bg-transparent border-none cursor-pointer">Cancel</button>
+                      <button type="submit" [disabled]="addressForm.invalid" class="text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:text-blue-800 bg-transparent border-none cursor-pointer disabled:opacity-50">Save Address</button>
+                    </div>
+                  </form>
+                } @else {
+                  <div class="relative bg-white border-2 border-slate-200 p-6 group hover:border-slate-900 transition-colors">
+                    <h3 class="text-base font-bold text-slate-900 mb-1 uppercase">{{ address.Street }}</h3>
+                    <span class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{{ address.city }}, {{ address.zipCode }}</span>
+                    <div class="mt-5 flex gap-5">
+                      <button (click)="startEditAddress(address)" class="text-[10px] font-bold uppercase underline underline-offset-4 text-slate-900 hover:text-blue-600 bg-transparent border-none cursor-pointer">Edit</button>
+                      <button (click)="removeAddress(address.id)" class="text-[10px] font-bold uppercase underline underline-offset-4 text-slate-900 hover:text-red-500 bg-transparent border-none cursor-pointer">Remove</button>
+                    </div>
+                  </div>
+                }
               }
             </div>
           </section>
-
         </div>
       }
 
       @if (activeTab() === 'orders') {
         <section>
-          <div class="flex items-end justify-between mb-8">
-            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Order History</h2>
-            <span class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest">
-              {{ orders().length }} Records
-            </span>
-          </div>
+          @if (selectedOrder(); as order) {
+            <div class="animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <div class="flex items-center justify-between mb-8">
+                <button (click)="backToHistory()" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-colors bg-transparent border-none cursor-pointer">
+                  &larr; Back to History
+                </button>
+                <span class="px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest bg-slate-900 text-white border border-slate-900">{{ order.status }}</span>
+              </div>
 
-          @if (isLoadingOrders()) {
-            <div class="py-24 text-center border border-slate-100 flex flex-col items-center justify-center bg-slate-50 animate-pulse">
-              <div class="h-4 w-40 bg-slate-200 mb-3"></div>
-              <div class="h-3 w-24 bg-slate-200"></div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="border border-slate-200 p-6 bg-slate-50">
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Shipping To</p>
+                  <p class="text-sm font-bold text-slate-900 uppercase">{{ order.shippingCity }}</p>
+                  <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Verified shipping destination</p>
+                </div>
+                <div class="border border-slate-200 p-6 bg-slate-900 text-white">
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Total Amount</p>
+                  <div class="flex justify-between items-baseline">
+                    <span class="text-2xl font-black">{{ order.totalAmount }} MAD</span>
+                    <span class="text-[10px] font-bold uppercase text-slate-400">#{{ order.id }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border border-slate-200 bg-white">
+                <div class="bg-slate-50 px-6 py-3 border-b border-slate-200">
+                  <span class="text-[10px] font-bold text-slate-900 uppercase tracking-widest">Items Purchased</span>
+                </div>
+                <div class="divide-y divide-slate-100">
+                  @for (item of order.items; track item.id) {
+                    <div class="p-6 flex justify-between items-center hover:bg-slate-50 transition-colors">
+                      <div>
+                        <p class="text-sm font-bold text-slate-900 uppercase">{{ item.productName }}</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">{{ item.quantity }} x {{ item.unitPrice }} MAD</p>
+                      </div>
+                      <p class="text-sm font-black text-slate-900">{{ item.totalPrice }} MAD</p>
+                    </div>
+                  }
+                </div>
+              </div>
             </div>
-          } @else if (orders().length === 0) {
-            <div class="py-24 text-center border border-slate-100 flex flex-col items-center justify-center bg-slate-50">
-              <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">No orders found matching your criteria.</p>
-              <button routerLink="/catalog" class="text-[10px] font-bold uppercase tracking-widest text-slate-900 underline underline-offset-4 hover:text-slate-500 transition-colors cursor-pointer bg-transparent border-none">
-                Start Shopping
-              </button>
-            </div>
+
           } @else {
+            <div class="flex items-end justify-between mb-8">
+              <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Order History</h2>
+              <span class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest">{{ orders().length }} Records</span>
+            </div>
 
             <div class="flex flex-col gap-3">
-
               <div class="hidden md:grid grid-cols-4 gap-4 px-6 pb-2 border-b border-slate-200">
                 <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Order ID</span>
                 <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Date Placed</span>
@@ -146,56 +187,24 @@
               </div>
 
               @for (order of orders(); track order.id) {
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center bg-white border-2 border-slate-100 p-6 hover:border-slate-900 transition-all group cursor-pointer">
-
-                  <div class="flex md:block justify-between items-center">
-                    <span class="md:hidden text-[10px] font-bold uppercase tracking-widest text-slate-400">Order ID</span>
-                    <span class="text-sm font-black text-slate-900">#{{ order.id }}</span>
-                  </div>
-
-                  <div class="flex md:block justify-between items-center">
-                    <span class="md:hidden text-[10px] font-bold uppercase tracking-widest text-slate-400">Date</span>
-                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ order.orderDate | date:'MMM d, yyyy' }}</span>
-                  </div>
-
-                  <div class="flex md:block justify-between items-center">
-                    <span class="md:hidden text-[10px] font-bold uppercase tracking-widest text-slate-400">Status</span>
+                <div (click)="viewOrderDetails(order.id)" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center bg-white border-2 border-slate-100 p-6 hover:border-slate-900 transition-all group cursor-pointer">
+                  <span class="text-sm font-black text-slate-900">#{{ order.id }}</span>
+                  <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ order.orderDate | date:'MMM d, yyyy' }}</span>
+                  <div>
                     <span class="inline-block px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest border"
                           [ngClass]="{
                             'bg-slate-100 text-slate-900 border-slate-200': order.status === 'PENDING',
-                            'bg-slate-900 text-white border-slate-900': order.status === 'SHIPPED' || order.status === 'DELIVERED' || order.status === 'CONFIRMED',
+                            'bg-slate-900 text-white border-slate-900': order.status !== 'PENDING' && order.status !== 'CANCELLED',
                             'bg-red-50 text-red-700 border-red-200': order.status === 'CANCELLED'
-                          }">
-                      {{ order.status }}
-                    </span>
+                          }">{{ order.status }}</span>
                   </div>
-
-                  <div class="flex justify-between items-center md:justify-end">
-                    <span class="md:hidden text-[10px] font-bold uppercase tracking-widest text-slate-400">Total</span>
-                    <div class="flex items-center gap-4">
-                      <span class="text-sm font-black text-slate-900">{{ order.totalAmount }} MAD</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-slate-300 group-hover:text-slate-900 transition-colors hidden md:block">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                      </svg>
-                    </div>
+                  <div class="flex items-center justify-end gap-4">
+                    <span class="text-sm font-black text-slate-900">{{ order.totalAmount }} MAD</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-slate-300 group-hover:text-slate-900 transition-colors hidden md:block"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
                   </div>
-                  @if (order.status === 'PENDING') {
-                    <div class="md:col-span-4 flex justify-end mt-2 pt-4 border-t border-slate-100">
-                      <button 
-                        (click)="onCancelOrder(order.id); $event.stopPropagation()" 
-                        class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-red-600 transition-colors cursor-pointer bg-transparent border-none p-0 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        Cancel Order
-                      </button> 
-                    </div>
-                  }
-
                 </div>
               }
             </div>
-
           }
         </section>
       }

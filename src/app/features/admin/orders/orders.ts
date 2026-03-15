@@ -30,7 +30,7 @@ export class Orders {
     this.errorMessage.set(null);
     this.searchUserId.set(null);
 
-    this.orderService.getOrderById(id).subscribe({
+    this.orderService.getAdminOrderById(id).subscribe({
       next: (order) => {
         this.orders.set([order]);
         this.isLoading.set(false);
