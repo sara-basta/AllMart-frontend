@@ -83,12 +83,14 @@ export class Checkout implements OnInit{
     } : undefined;
 
     if (productId) {
-      // BUY NOW FLOW
-      if (isNew) {
-        alert("The 'Buy Now' feature requires a saved address. Please select one from your profile.");
-        return; 
-      }
-      this.order.createOrder({ productId, addressId: addressId! }).subscribe({
+      // buy now flow
+      const request = { 
+        productId: productId, 
+        addressId: addressId ? addressId : undefined,
+        newAddress: newAddressObj
+      };
+
+      this.order.createOrder(request).subscribe({
         next: (res) => this.executePayment(Number(res.id), paymentMethod),
         error: (err) => console.error('Buy Now failed:', err)
       });

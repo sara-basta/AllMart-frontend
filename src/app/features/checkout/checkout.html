@@ -37,20 +37,14 @@
           }
 
           <div
-            (click)="buyNowProductId() ? null : toggleNewAddress(true)"
+            (click)="toggleNewAddress(true)"
             [class.border-slate-900]="isCreatingNewAddress()"
             [class.border-dashed]="!isCreatingNewAddress()"
             [class.border-slate-200]="!isCreatingNewAddress()"
-            [class.opacity-50]="buyNowProductId()"
-            [class.cursor-not-allowed]="buyNowProductId()"
             class="p-6 border-2 cursor-pointer transition-all hover:bg-slate-50 flex flex-col items-center justify-center text-center">
             
             <span class="text-xs font-black uppercase text-slate-900 mb-1">+ New Address</span>
-            @if (buyNowProductId()) {
-              <span class="text-[9px] font-bold text-red-500 uppercase tracking-widest">Not available for Buy Now</span>
-            } @else {
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Deliver to a different location</span>
-            }
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Deliver to a different location</span>
           </div>
 
         </div>

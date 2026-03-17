@@ -33,15 +33,15 @@ export class Order {
   }
 
   getHistory(page: number = 0, size: number = 10): Observable<any> {
-  return this.http.get<any>(`${this.ordersApi}/my-orders?page=${page}&size=${size}`);
-}
+    return this.http.get<any>(`${this.ordersApi}/my-orders?page=${page}&size=${size}`);
+  }
 
-  createOrder(request: { productId: number; addressId: number }): Observable<OrderResponse> {
+  createOrder(request: { productId: number; addressId?: number; newAddress?: { street: string, city: string, zipCode: string } }): Observable<OrderResponse> {
     return this.http.post<OrderResponse>(this.ordersApi, request);
   }
 
   cancelOrder(orderId: number): Observable<OrderResponse> {
-        return this.http.post<OrderResponse>(`${this.ordersApi}/${orderId}/cancel`, null);
+    return this.http.post<OrderResponse>(`${this.ordersApi}/${orderId}/cancel`, null);
   }
 
   getOrderById(id: number): Observable<OrderResponse> {
