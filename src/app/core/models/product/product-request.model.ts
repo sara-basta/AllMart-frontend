@@ -5,5 +5,5 @@ export interface ProductRequest {
     price: number;
     stockQuantity: number;
     categoryId: number;
-    imageUrl?: string;
+    imageUrls?: string[];
 }

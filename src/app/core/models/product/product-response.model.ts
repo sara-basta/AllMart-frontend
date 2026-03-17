@@ -1,3 +1,5 @@
+import { ProductImage } from "./product-image.model";
+
 export interface ProductResponse {
     id: number;
     name: string;
@@ -5,7 +7,7 @@ export interface ProductResponse {
     price: number;
     stockQuantity: number;
     categoryName: string;
-    imageUrl: string;
+    images: ProductImage[];
     averageRating?: number;
     reviewCount?: number;
 }

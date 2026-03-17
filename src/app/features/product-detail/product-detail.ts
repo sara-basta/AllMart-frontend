@@ -25,6 +25,8 @@ export class ProductDetail implements OnInit{
 
   productId!: number;
   productRes = signal<ProductResponse | null>(null);
+  
+  currentMainImage = signal<string | null>(null);
 
   newReview = { rating: 0, comment: '' };
   reviewError = '';
@@ -44,6 +46,9 @@ export class ProductDetail implements OnInit{
         this.product.getProductById(this.productId).subscribe({
           next: (data) => {
             this.productRes.set(data);
+            if (data.images && data.images.length > 0) {
+              this.currentMainImage.set(data.images[0].imageUrl);
+            }
           },
           error: (err) => {
             console.error('Failed to load product details', err);
@@ -131,5 +136,9 @@ export class ProductDetail implements OnInit{
         this.reviewError = err.error?.message || "You cannot review this product.";
       }
     });
+  }
+
+  selectImage(url: string) {
+    this.currentMainImage.set(url);
   }
 }

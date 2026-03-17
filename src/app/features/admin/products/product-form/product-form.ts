@@ -30,7 +30,8 @@ export class ProductForm {
 
   private cloudinary = inject(Cloudinary);
   isUploading = signal(false);
-  previewUrl = signal<string | null>(null);
+
+  uploadedImageUrls = signal<string[]>([]);
 
   productForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -38,7 +39,6 @@ export class ProductForm {
     price: [0, [Validators.required, Validators.min(0.01)]],
     stockQuantity: [0, [Validators.required, Validators.min(0)]],
     categoryId: [null as number | null, Validators.required],
-    imageUrl: ['']
   });
 
   ngOnInit() {
@@ -71,15 +71,38 @@ export class ProductForm {
           price: product.price,
           stockQuantity: product.stockQuantity || 0,
           categoryId: categoryIdToSelect, 
-          imageUrl: product.imageUrl
         });
-
-        if (product.imageUrl) {
-          this.previewUrl.set(product.imageUrl);
+        if (product.images && product.images.length > 0) {
+          const urls = product.images.map(img => img.imageUrl);
+          this.uploadedImageUrls.set(urls);
         }
       },
       error: (err) => console.error('Failed to fetch product', err)
     });
+  }
+
+  removeImage(index: number) {
+    this.uploadedImageUrls.update(urls => urls.filter((_, i) => i !== index));
+  }
+
+  onFilesSelected(event: any) {
+    const files: FileList = event.target.files;
+    if (files && files.length > 0) {
+      this.isUploading.set(true);
+      
+      const uploadRequests = Array.from(files).map(file => this.cloudinary.uploadImage(file));
+      
+      forkJoin(uploadRequests).subscribe({
+        next: (urls: string[]) => {
+          this.uploadedImageUrls.update(prev => [...prev, ...urls]);
+          this.isUploading.set(false);
+        },
+        error: (err) => {
+          console.error('Upload failed', err);
+          this.isUploading.set(false);
+        }
+      });
+    }
   }
 
   onSubmit() {
@@ -89,9 +112,12 @@ export class ProductForm {
     }
 
     this.isSubmitting.set(true);
-    
-    const requestData = this.productForm.value as ProductRequest;
 
+    const requestData: ProductRequest = {
+      ...this.productForm.value as any,
+      imageUrls: this.uploadedImageUrls()
+    };
+    
     if (this.isEditMode() && this.productId()) {
       
       this.product.updateProduct(this.productId()!, requestData).subscribe({
@@ -108,25 +134,6 @@ export class ProductForm {
         error: (err) => { 
           console.error('Failed to create product', err); 
           this.isSubmitting.set(false); 
-        }
-      });
-    }
-  }
-
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.isUploading.set(true);
-      
-      this.cloudinary.uploadImage(file).subscribe({
-        next: (url: string) => {
-          this.productForm.patchValue({ imageUrl: url });
-          this.previewUrl.set(url);
-          this.isUploading.set(false);
-        },
-        error: (err) => {
-          console.error('Upload failed', err);
-          this.isUploading.set(false);
         }
       });
     }

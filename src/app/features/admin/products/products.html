@@ -27,8 +27,8 @@
             <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
               <td class="py-4 px-4 text-sm font-medium text-slate-500">#{{ product.id }}</td>
               <td class="py-4 px-4">
-                @if (product.imageUrl) {
-                  <img [src]="product.imageUrl" class="w-10 h-10 object-cover border border-slate-200" alt="img">
+                @if (product.images && product.images.length > 0) {
+                  <img [src]="product.images[0].imageUrl" class="w-10 h-10 object-cover border border-slate-200" alt="img">
                 } @else {
                   <div class="w-10 h-10 bg-slate-100 border border-slate-200 flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-slate-400">
