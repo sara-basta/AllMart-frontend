@@ -5,7 +5,7 @@ import { User } from '../../core/services/user/user';
 import { Address } from '../../core/services/address/address';
 import { Order } from '../../core/services/order/order';
 import { OrderResponse } from '../../core/models/order/order-response.model';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +22,7 @@ export class Profile implements OnInit{
   userAddresses = this.address.userAddresses;
   orders = signal<OrderResponse[]>([]);
   isLoadingOrders = signal<boolean>(true);
-  activeTab = signal<'profile' | 'orders'>('profile');
+  activeTab = signal<'profile' | 'orders' | 'security'>('profile');
 
   isEditingProfile = signal(false);
   isSavingProfile = signal(false);
@@ -38,6 +38,11 @@ export class Profile implements OnInit{
   totalElements = signal<number>(0);
   pageSize = 10;
 
+  isChangingPassword = signal(false);
+  passwordSuccessMsg = signal<string | null>(null);
+  passwordErrorMsg = signal<string | null>(null);
+
+  passwordForm!: FormGroup;
 
   constructor() {
     this.profileForm = this.fb.group({
@@ -50,7 +55,42 @@ export class Profile implements OnInit{
       city: ['', Validators.required],
       zipCode: ['', Validators.required]
     });
+
+    this.passwordForm = this.fb.group({
+    oldPassword: ['', [Validators.required]],
+    newPassword: ['', [Validators.required, Validators.minLength(8)]],
+    confirmPassword: ['', [Validators.required]]
+    }, { validators: this.passwordMatchValidator });
   }
+
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const newPassword = control.get('newPassword')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
+  
+  return newPassword === confirmPassword ? null : { mismatch: true };
+  }
+
+  onChangePassword() {
+  if (this.passwordForm.invalid) return;
+
+  this.isChangingPassword.set(true);
+  this.passwordErrorMsg.set(null);
+  this.passwordSuccessMsg.set(null);
+
+  this.user.changePassword(this.passwordForm.value).subscribe({
+    next: (res) => {
+      this.isChangingPassword.set(false);
+      this.passwordSuccessMsg.set(res.message || 'Password updated successfully.');
+      this.passwordForm.reset();
+      
+      setTimeout(() => this.passwordSuccessMsg.set(null), 4000);
+    },
+    error: (err) => {
+      this.isChangingPassword.set(false);
+      this.passwordErrorMsg.set(err.error?.message || 'Failed to update security credentials.');
+    }
+  });
+ }
 
   ngOnInit() {
     this.address.loadMyAddresses();

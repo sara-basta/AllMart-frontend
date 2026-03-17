@@ -55,4 +55,8 @@ export class User {
   updateProfile(data: { firstName?: string, lastName?: string }): Observable<UserResponse> {
     return this.http.patch<UserResponse>(`${this.apiUrl}/profile`, data);
   }
+
+  changePassword(passwordData: any) {
+    return this.http.put<{message: string}>(`${this.apiUrl}/profile/change-password`, passwordData);
+  }
 }
