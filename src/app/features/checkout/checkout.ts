@@ -5,6 +5,7 @@ import { Order } from '../../core/services/order/order';
 import { Cart } from '../../core/services/cart/cart';
 import { FormsModule } from '@angular/forms';
 import { PaymentRequest } from '../../core/models/payment/payment-request.model';
+import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
 @Component({
   selector: 'app-checkout',
   imports: [RouterLink, FormsModule],
@@ -30,6 +31,16 @@ export class Checkout implements OnInit{
   newStreet = signal<string>('');
   newCity = signal<string>('');
   newZipCode = signal<string>('');
+
+
+  stripePromise = loadStripe('pk_test_51TBxcgRsei3heG1XzZn2qNGgPWfoqFLI0aTmUil9rdoMTP0PMSd32lM0f8C5jwnzjRYuzxAFsSRqzstXyNCS9Mx00085FMEC1U');
+  stripe: Stripe | null = null;
+  elements: StripeElements | null = null;
+  clientSecret = signal<string | null>(null);
+  isProcessingPayment = signal(false);
+  paymentError = signal<string>('');
+
+  isLoading = signal<boolean>(false);
 
   ngOnInit() {
     this.address.loadMyAddresses();
@@ -71,10 +82,6 @@ export class Checkout implements OnInit{
       alert("Please select a payment method.");
       return;
     }
-    if (paymentMethod === 'CREDIT_CARD' && !this.cardNumber()) {
-      alert("Please enter a valid card number.");
-      return;
-    }
 
     const newAddressObj = isNew ? {
       street: this.newStreet(),
@@ -112,20 +119,54 @@ private executePayment(orderId: number, paymentMethod: 'CASH_ON_DELIVERY' | 'CRE
   const paymentRequest: PaymentRequest = {
     orderId,
     paymentMethod,
-    cardNumber: paymentMethod === 'CREDIT_CARD' ? this.cardNumber() : undefined
   };
 
   this.order.processPayment(paymentRequest).subscribe({
-    next: () => {
-      this.cart.clearLocalCart();
-      this.router.navigate(['/profile']);
-    },
-    error: (err) => {
-      console.error('Payment processing failed:', err);
-      alert("Order created, but payment failed. Check your order history.");
-      this.cart.clearLocalCart();
-      this.router.navigate(['/profile']);
-    }
-  });
-}
+  next: async (res: any) => {
+        if (paymentMethod === 'CASH_ON_DELIVERY') {
+          this.cart.clearLocalCart();
+          this.router.navigate(['/profile']);
+        } else if (res.clientSecret) {
+          this.clientSecret.set(res.clientSecret);
+          this.stripe = await this.stripePromise;
+          
+          if (this.stripe) {
+            this.elements = this.stripe.elements({ clientSecret: res.clientSecret });
+            const paymentElement = this.elements.create('payment');
+            
+            setTimeout(() => {
+              paymentElement.mount('#payment-element');
+            }, 100);
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Payment processing failed:', err);
+        alert("Order created, but payment failed. Check your order history.");
+        this.router.navigate(['/profile']);
+      }
+    });
+  }
+
+
+  async confirmStripePayment() {
+    if (!this.stripe || !this.elements) return;
+
+    this.isProcessingPayment.set(true);
+    this.paymentError.set('');
+
+    this.cart.clearLocalCart(); 
+
+    const { error } = await this.stripe.confirmPayment({
+      elements: this.elements,
+      confirmParams: {
+        return_url: 'http://localhost:4200/profile', 
+      },
+    });
+
+    if (error) {
+      this.paymentError.set(error.message || 'An unexpected error occurred.');
+      this.isProcessingPayment.set(false);
+    } 
+  }
 }

@@ -1,3 +1,4 @@
+@if (!clientSecret()) {
 <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
   <div class="mb-12">
     <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Checkout.</h1>
@@ -5,9 +6,7 @@
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
-
     <div class="lg:col-span-2 space-y-12">
-
       <section>
         <div class="flex justify-between items-end mb-6">
           <h3 class="text-xs font-bold uppercase tracking-widest text-slate-900">1. Shipping Address</h3>
@@ -15,7 +14,6 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          
           @for (addr of userAddresses(); track addr.id) {
             <div
               (click)="selectSavedAddress(addr.id)"
@@ -46,7 +44,6 @@
             <span class="text-xs font-black uppercase text-slate-900 mb-1">+ New Address</span>
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Deliver to a different location</span>
           </div>
-
         </div>
 
         @if (isCreatingNewAddress()) {
@@ -54,25 +51,12 @@
             <h4 class="text-[10px] font-bold uppercase tracking-widest text-slate-900 mb-2">Enter Address Details</h4>
             
             <div>
-              <input 
-                type="text" 
-                [(ngModel)]="newStreet" 
-                placeholder="Street Address" 
-                class="w-full border border-slate-200 px-5 py-4 text-xs font-bold tracking-widest focus:border-slate-900 focus:outline-none transition-colors rounded-none placeholder-slate-300 bg-white">
+              <input type="text" [(ngModel)]="newStreet" placeholder="Street Address" class="w-full border border-slate-200 px-5 py-4 text-xs font-bold tracking-widest focus:border-slate-900 focus:outline-none transition-colors rounded-none placeholder-slate-300 bg-white">
             </div>
             
             <div class="grid grid-cols-2 gap-4">
-              <input 
-                type="text" 
-                [(ngModel)]="newCity" 
-                placeholder="City" 
-                class="w-full border border-slate-200 px-5 py-4 text-xs font-bold tracking-widest focus:border-slate-900 focus:outline-none transition-colors rounded-none placeholder-slate-300 bg-white">
-              
-              <input 
-                type="text" 
-                [(ngModel)]="newZipCode" 
-                placeholder="Zip Code" 
-                class="w-full border border-slate-200 px-5 py-4 text-xs font-bold tracking-widest focus:border-slate-900 focus:outline-none transition-colors rounded-none placeholder-slate-300 bg-white">
+              <input type="text" [(ngModel)]="newCity" placeholder="City" class="w-full border border-slate-200 px-5 py-4 text-xs font-bold tracking-widest focus:border-slate-900 focus:outline-none transition-colors rounded-none placeholder-slate-300 bg-white">
+              <input type="text" [(ngModel)]="newZipCode" placeholder="Zip Code" class="w-full border border-slate-200 px-5 py-4 text-xs font-bold tracking-widest focus:border-slate-900 focus:outline-none transition-colors rounded-none placeholder-slate-300 bg-white">
             </div>
           </div>
         }
@@ -81,7 +65,6 @@
       <section>
         <h3 class="text-xs font-bold uppercase tracking-widest text-slate-900 mb-6">2. Payment Method</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
           <div
             (click)="selectedPayment.set('CASH_ON_DELIVERY')"
             [class.border-slate-900]="selectedPayment() === 'CASH_ON_DELIVERY'"
@@ -99,19 +82,7 @@
             <span class="text-xs font-black text-slate-900 uppercase block mb-1">Credit Card</span>
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Pay now using your card details.</p>
           </div>
-
         </div>
-
-        @if (selectedPayment() === 'CREDIT_CARD') {
-          <div class="mt-4 p-6 border-2 border-slate-900 bg-slate-50">
-            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-900 mb-3 block">Card Number</label>
-            <input 
-              type="text" 
-              [(ngModel)]="cardNumber" 
-              placeholder="XXXX XXXX XXXX XXXX" 
-              class="w-full border border-slate-200 px-5 py-4 text-xs font-bold tracking-widest focus:border-slate-900 focus:outline-none transition-colors rounded-none placeholder-slate-300 bg-white">
-          </div>
-        }
       </section>
     </div>
 
@@ -121,9 +92,9 @@
 
         <button
           (click)="confirmOrder()"
-          [disabled]="(!selectedAddressId() && !isCreatingNewAddress()) || !selectedPayment()"
+          [disabled]="isLoading() || (!selectedAddressId() && !isCreatingNewAddress()) || !selectedPayment()"
           class="w-full bg-slate-900 text-white py-5 text-xs font-bold uppercase tracking-widest disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-800 transition-all cursor-pointer border-none shadow-sm active:translate-y-0.5">
-          Confirm Order.
+          {{ isLoading() ? 'Processing...' : 'Confirm Order.' }}
         </button>
 
         <p class="text-[9px] text-center text-slate-400 uppercase font-bold tracking-tighter mt-6 leading-relaxed">
@@ -131,6 +102,36 @@
         </p>
       </div>
     </div>
-
   </div>
 </div>
+}
+
+@if (clientSecret()) {
+<div class="max-w-xl mx-auto mt-24 p-8 border border-slate-200 bg-white shadow-sm">
+  <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-6">Complete Payment</h2>
+  <p class="text-sm font-medium text-slate-500 mb-8">Please enter your credit card details below to finalize your order.</p>
+
+  <div id="payment-element" class="mb-8 p-4 border border-slate-100 bg-slate-50 rounded-md"></div>
+  
+  @if (paymentError()) {
+    <div class="p-4 mb-6 bg-red-50 text-red-700 text-[10px] font-bold uppercase tracking-widest border border-red-200">
+      {{ paymentError() }}
+    </div>
+  }
+
+  <button 
+    (click)="confirmStripePayment()" 
+    [disabled]="isProcessingPayment()"
+    class="w-full bg-slate-900 text-white py-5 text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors disabled:opacity-50 shadow-sm border-none cursor-pointer flex justify-center items-center gap-2">
+    @if (isProcessingPayment()) {
+      <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      Processing...
+    } @else {
+      Pay Now
+    }
+  </button>
+</div>
+}

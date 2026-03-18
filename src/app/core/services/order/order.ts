@@ -26,10 +26,8 @@ export class Order {
     });
   }
 
-  processPayment(request: PaymentRequest): Observable<string> {
-    return this.http.post(`${this.paymentsApi}`, request, {
-      responseType: 'text'
-    });
+  processPayment(request: PaymentRequest): Observable<{clientSecret?: string, message?: string}> {
+    return this.http.post<{clientSecret?: string, message?: string}>(`${this.paymentsApi}`, request);
   }
 
   getHistory(page: number = 0, size: number = 10): Observable<any> {
