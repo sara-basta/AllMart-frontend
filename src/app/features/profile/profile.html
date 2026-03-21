@@ -148,8 +148,16 @@
               </button>
 
               <div class="flex items-center justify-between mb-8">
-                <h2 class="text-xl font-black text-slate-900 uppercase">Order #{{ order.id }}</h2>
-                <span class="px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest bg-slate-900 text-white border border-slate-900">{{ order.status }}</span>
+                <div class="flex items-center gap-4">
+                  <h2 class="text-xl font-black text-slate-900 uppercase">Order #{{ order.id }}</h2>
+                  <span class="px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest bg-slate-900 text-white border border-slate-900">{{ order.status }}</span>
+                </div>
+
+                @if (order.status === 'PENDING' || order.status === 'CONFIRMED') {
+                  <button (click)="onCancelOrder(order.id)" class="px-4 py-1.5 text-[9px] font-bold uppercase tracking-widest text-red-600 bg-red-50 border border-red-200 hover:bg-red-600 hover:text-white transition-colors cursor-pointer">
+                    Cancel Order
+                  </button>
+                }
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">

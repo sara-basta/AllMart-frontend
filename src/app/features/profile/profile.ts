@@ -167,6 +167,11 @@ export class Profile implements OnInit{
               o => o.id === orderId ? { ...o, status: 'CANCELLED' } : o
             )
           );
+
+          const currentSelected = this.selectedOrder();
+          if (currentSelected && currentSelected.id === orderId) {
+             this.selectedOrder.set({ ...currentSelected, status: 'CANCELLED' });
+          }
         },
         error: (err) => {
           console.error('Failed to cancel order:', err);
