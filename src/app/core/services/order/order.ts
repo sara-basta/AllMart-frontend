@@ -3,15 +3,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { OrderResponse } from '../../models/order/order-response.model';
 import { PaymentRequest } from '../../models/payment/payment-request.model';
-
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class Order {
   private http = inject(HttpClient);
 
-  private cartsApi = 'http://localhost:8080/api/carts';
-  private paymentsApi = 'http://localhost:8080/api/payments';
-  private ordersApi = 'http://localhost:8080/api/orders';
+  private cartsApi = `${environment.apiUrl}/carts`;
+  private paymentsApi = `${environment.apiUrl}/payments`;
+  private ordersApi = `${environment.apiUrl}/orders`;
 
   checkoutFromCart(addressId?: number, newAddress?: { street: string, city: string, zipCode: string }): Observable<string> {
     let params = new HttpParams();

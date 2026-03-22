@@ -1,0 +1,34 @@
+<section class="border-t border-slate-100 pt-10">
+  <div class="flex items-end justify-between mb-6">
+    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Saved Addresses</h2>
+    <a routerLink="/profile/address" class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest hover:text-slate-500 transition-colors cursor-pointer">Add New &rarr;</a>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    @for (address of addresses(); track address.id) {
+      @if (editingAddressId === address.id) {
+        <form [formGroup]="addressForm" (ngSubmit)="save()" class="relative bg-white border-2 border-slate-900 p-6 shadow-md">
+          <div class="space-y-3 mb-4">
+            <input type="text" formControlName="street" class="w-full p-2 bg-slate-50 border border-slate-200 text-xs focus:border-slate-900 focus:outline-none" placeholder="Street Address">
+            <div class="flex gap-2">
+              <input type="text" formControlName="city" class="w-full p-2 bg-slate-50 border border-slate-200 text-xs focus:border-slate-900 focus:outline-none" placeholder="City">
+              <input type="text" formControlName="zipCode" class="w-1/3 p-2 bg-slate-50 border border-slate-200 text-xs focus:border-slate-900 focus:outline-none" placeholder="Zip">
+            </div>
+          </div>
+          <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100">
+            <button type="button" (click)="cancelEdit()" class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 bg-transparent border-none cursor-pointer">Cancel</button>
+            <button type="submit" [disabled]="addressForm.invalid" class="text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:text-blue-800 bg-transparent border-none cursor-pointer disabled:opacity-50">Save Address</button>
+          </div>
+        </form>
+      } @else {
+        <div class="relative bg-white border-2 border-slate-200 p-6 group hover:border-slate-900 transition-colors">
+          <h3 class="text-base font-bold text-slate-900 mb-1 uppercase">{{ address.Street || address.street }}</h3>
+          <span class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{{ address.city }}, {{ address.zipCode }}</span>
+          <div class="mt-5 flex gap-5">
+            <button (click)="startEdit(address)" class="text-[10px] font-bold uppercase underline underline-offset-4 text-slate-900 hover:text-blue-600 bg-transparent border-none cursor-pointer">Edit</button>
+            <button (click)="remove(address.id)" class="text-[10px] font-bold uppercase underline underline-offset-4 text-slate-900 hover:text-red-500 bg-transparent border-none cursor-pointer">Remove</button>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</section>

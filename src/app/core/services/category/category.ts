@@ -4,6 +4,7 @@ import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CategoryResponse } from '../../models/product/category-response.model';
 import { CategoryRequest } from '../../models/product/category-request.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { CategoryRequest } from '../../models/product/category-request.model';
 export class Category {
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:8080/api/categories';
+  private apiUrl = `${environment.apiUrl}/categories`;
 
   getAllCategories(): Observable<PaginatedResponse<CategoryResponse>> {
     return this.http.get<PaginatedResponse<CategoryResponse>>(this.apiUrl);

@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ProductResponse } from '../../models/product/product-response.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { ProductResponse } from '../../models/product/product-response.model';
 export class Wishlist {
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:8080/api/wishlists';
+  private apiUrl = `${environment.apiUrl}/wishlists`;
 
   wishlistItems = signal<ProductResponse[]>([]); 
   wishlistIds = signal<Set<number>>(new Set()); 

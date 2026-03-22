@@ -7,6 +7,7 @@ import { AuthResponse } from '../../models/auth/auth-response.model';
 import { RegisterRequest } from '../../models/auth/register-request.model';
 import { Cart } from '../cart/cart';
 import { User } from '../user/user';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class Auth {
   private user = inject(User);
   private cart = inject(Cart);
 
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials);

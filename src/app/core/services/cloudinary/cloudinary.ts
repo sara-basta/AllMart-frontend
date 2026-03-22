@@ -1,12 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpBackend, HttpHeaders } from '@angular/common/http'; // Import HttpBackend
 import { Observable, map } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 export class Cloudinary {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/upload';
+  private apiUrl = `${environment.apiUrl}/upload`;
 
   uploadImage(file: File): Observable<string> {
     const formData = new FormData();

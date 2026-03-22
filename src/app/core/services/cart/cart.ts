@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {CartItem} from '../../models/cart/cart-item.model';
 import { ProductResponse } from '../../models/product/product-response.model';
 import { User } from '../user/user';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class Cart {
   private http = inject(HttpClient);
   private user = inject(User);
 
-  private apiUrl = 'http://localhost:8080/api/carts';
+  private apiUrl = `${environment.apiUrl}/carts`;
 
   cartItems = signal<CartItem[]>(this.loadCart());
 

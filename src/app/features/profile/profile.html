@@ -1,12 +1,10 @@
 <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
-
   <div class="mb-10 border-b border-slate-100 pb-6 flex items-baseline justify-between">
     <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">My Account.</h1>
     <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Welcome Back</span>
   </div>
 
   <div class="flex flex-col lg:flex-row gap-12">
-
     <aside class="w-full lg:w-56 flex-shrink-0">
       <div class="sticky top-32">
         <h2 class="text-[10px] font-bold text-slate-900 uppercase tracking-widest mb-3">Navigation</h2>
@@ -48,265 +46,47 @@
     </aside>
 
     <main class="flex-1 max-w-4xl">
-
       @if (activeTab() === 'profile') {
         <div class="flex flex-col gap-12">
-          <section>
-            <div class="flex items-end justify-between mb-6">
-              <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Personal Details</h2>
-              @if (!isEditingProfile()) {
-                <button (click)="toggleEditProfile()" class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest hover:text-slate-500 transition-colors cursor-pointer bg-transparent border-none">
-                  Edit Profile &rarr;
-                </button>
-              }
-            </div>
-
-            @if (user.currentUserSignal(); as currentUser) {
-              @if (isEditingProfile()) {
-                <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-slate-200 p-6 bg-slate-50">
-                  <div class="space-y-2">
-                    <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">First Name</label>
-                    <input type="text" formControlName="firstName" class="w-full p-3 bg-white border border-slate-200 text-sm focus:outline-none focus:border-slate-900 transition-colors">
-                  </div>
-                  <div class="space-y-2">
-                    <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">Last Name</label>
-                    <input type="text" formControlName="lastName" class="w-full p-3 bg-white border border-slate-200 text-sm focus:outline-none focus:border-slate-900 transition-colors">
-                  </div>
-                  <div class="md:col-span-2 space-y-2 opacity-50">
-                    <label class="block text-[10px] font-bold text-slate-900 uppercase tracking-widest">Email Address</label>
-                    <input type="text" [value]="currentUser.email" disabled class="w-full p-3 bg-slate-100 border border-slate-200 text-sm cursor-not-allowed">
-                  </div>
-                  <div class="md:col-span-2 flex justify-end gap-4 mt-4 pt-4 border-t border-slate-200">
-                    <button type="button" (click)="toggleEditProfile()" class="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 cursor-pointer bg-transparent border-none">Cancel</button>
-                    <button type="submit" [disabled]="profileForm.invalid || isSavingProfile()" class="bg-slate-900 text-white px-6 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors cursor-pointer border-none disabled:opacity-50">
-                      {{ isSavingProfile() ? 'Saving...' : 'Save Changes' }}
-                    </button>
-                  </div>
-                </form>
-              } @else {
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div class="border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">First Name</p>
-                    <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ currentUser.firstName }}</p>
-                  </div>
-                  <div class="border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Last Name</p>
-                    <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ currentUser.lastName }}</p>
-                  </div>
-                  <div class="md:col-span-2 border border-slate-200 p-5 bg-slate-50 group hover:border-slate-900 transition-colors">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Email Address</p>
-                    <p class="text-sm font-bold text-slate-900 tracking-tight">{{ currentUser.email }}</p>
-                  </div>
-                </div>
-              }
-            }
-          </section>
-
-          <section class="border-t border-slate-100 pt-10">
-            <div class="flex items-end justify-between mb-6">
-              <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Saved Addresses</h2>
-              <a routerLink="/profile/address" class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest hover:text-slate-500 transition-colors cursor-pointer">Add New &rarr;</a>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              @for (address of (userAddresses() || []); track address.id) {
-                @if (editingAddressId() === address.id) {
-                  <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="relative bg-white border-2 border-slate-900 p-6 shadow-md">
-                    <div class="space-y-3 mb-4">
-                      <input type="text" formControlName="street" class="w-full p-2 bg-slate-50 border border-slate-200 text-xs focus:border-slate-900 focus:outline-none" placeholder="Street Address">
-                      <div class="flex gap-2">
-                        <input type="text" formControlName="city" class="w-full p-2 bg-slate-50 border border-slate-200 text-xs focus:border-slate-900 focus:outline-none" placeholder="City">
-                        <input type="text" formControlName="zipCode" class="w-1/3 p-2 bg-slate-50 border border-slate-200 text-xs focus:border-slate-900 focus:outline-none" placeholder="Zip">
-                      </div>
-                    </div>
-                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100">
-                      <button type="button" (click)="cancelEditAddress()" class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 bg-transparent border-none cursor-pointer">Cancel</button>
-                      <button type="submit" [disabled]="addressForm.invalid" class="text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:text-blue-800 bg-transparent border-none cursor-pointer disabled:opacity-50">Save Address</button>
-                    </div>
-                  </form>
-                } @else {
-                  <div class="relative bg-white border-2 border-slate-200 p-6 group hover:border-slate-900 transition-colors">
-                    <h3 class="text-base font-bold text-slate-900 mb-1 uppercase">{{ address.Street }}</h3>
-                    <span class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{{ address.city }}, {{ address.zipCode }}</span>
-                    <div class="mt-5 flex gap-5">
-                      <button (click)="startEditAddress(address)" class="text-[10px] font-bold uppercase underline underline-offset-4 text-slate-900 hover:text-blue-600 bg-transparent border-none cursor-pointer">Edit</button>
-                      <button (click)="removeAddress(address.id)" class="text-[10px] font-bold uppercase underline underline-offset-4 text-slate-900 hover:text-red-500 bg-transparent border-none cursor-pointer">Remove</button>
-                    </div>
-                  </div>
-                }
-              }
-            </div>
-          </section>
+          @if (user.currentUserSignal(); as currentUser) {
+            <app-profile-details 
+              [currentUser]="currentUser"
+              [isSaving]="isSavingProfile()"
+              (onSave)="handleSaveProfile($event)">
+            </app-profile-details>
+          }
+          
+          <app-address-manager 
+            [addresses]="userAddresses() || []"
+            (onUpdate)="handleUpdateAddress($event)"
+            (onDelete)="handleDeleteAddress($event)">
+          </app-address-manager>
         </div>
       }
 
       @if (activeTab() === 'orders') {
-        <section>
-          @if (selectedOrder(); as order) {
-            <div class="animate-in fade-in slide-in-from-bottom-4 duration-300">
-              <button (click)="backToHistory()" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-colors bg-transparent border-none cursor-pointer mb-8">
-                &larr; Back to History
-              </button>
-
-              <div class="flex items-center justify-between mb-8">
-                <div class="flex items-center gap-4">
-                  <h2 class="text-xl font-black text-slate-900 uppercase">Order #{{ order.id }}</h2>
-                  <span class="px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest bg-slate-900 text-white border border-slate-900">{{ order.status }}</span>
-                </div>
-
-                @if (order.status === 'PENDING' || order.status === 'CONFIRMED') {
-                  <button (click)="onCancelOrder(order.id)" class="px-4 py-1.5 text-[9px] font-bold uppercase tracking-widest text-red-600 bg-red-50 border border-red-200 hover:bg-red-600 hover:text-white transition-colors cursor-pointer">
-                    Cancel Order
-                  </button>
-                }
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div class="border border-slate-200 p-6 bg-slate-50">
-                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Shipping To</p>
-                  <p class="text-sm font-bold text-slate-900 uppercase">{{ order.shippingCity }}</p>
-                </div>
-                <div class="border border-slate-200 p-6 bg-slate-900 text-white">
-                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 text-slate-400">Total Amount</p>
-                  <span class="text-2xl font-black">{{ order.totalAmount }} MAD</span>
-                </div>
-              </div>
-
-              <div class="border border-slate-200 bg-white">
-                <div class="bg-slate-50 px-6 py-3 border-b border-slate-200 text-[10px] font-bold text-slate-900 uppercase tracking-widest">Items Purchased</div>
-                <div class="divide-y divide-slate-100">
-                  @for (item of order.items; track item.id) {
-                    <div class="p-6 flex justify-between items-center">
-                      <div>
-                        <p class="text-sm font-bold text-slate-900 uppercase">{{ item.productName }}</p>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase">{{ item.quantity }} x {{ item.unitPrice }} MAD</p>
-                      </div>
-                      <p class="text-sm font-black text-slate-900">{{ item.totalPrice }} MAD</p>
-                    </div>
-                  }
-                </div>
-              </div>
-            </div>
-          } @else {
-            <div class="flex items-end justify-between mb-8">
-              <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Order History</h2>
-              <span class="hidden md:block text-[10px] font-semibold text-slate-900 uppercase tracking-widest">{{ totalElements() }} Records</span>
-            </div>
-
-            <div class="flex flex-col gap-3">
-              <div class="hidden md:grid grid-cols-4 gap-4 px-6 pb-2 border-b border-slate-200">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Order ID</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Date Placed</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Status</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">Total Amount</span>
-              </div>
-
-              @for (order of (orders() || []); track order.id) {
-                <div (click)="viewOrderDetails(order.id)" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center bg-white border-2 border-slate-100 p-6 hover:border-slate-900 transition-all group cursor-pointer">
-                  <span class="text-sm font-black text-slate-900">#{{ order.id }}</span>
-                  <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ order.orderDate | date:'MMM d, yyyy' }}</span>
-                  <div>
-                    <span class="inline-block px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest border"
-                          [ngClass]="{
-                            'bg-slate-100 text-slate-900 border-slate-200': order.status === 'PENDING',
-                            'bg-slate-900 text-white border-slate-900': order.status !== 'PENDING' && order.status !== 'CANCELLED',
-                            'bg-red-50 text-red-700 border-red-200': order.status === 'CANCELLED'
-                          }">{{ order.status }}</span>
-                  </div>
-                  <div class="flex items-center justify-end gap-4">
-                    <span class="text-sm font-black text-slate-900">{{ order.totalAmount }} MAD</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-slate-300 group-hover:text-slate-900 transition-colors hidden md:block">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                  </div>
-                </div>
-              }
-
-              @if (!isLoadingOrders() && totalElements() === 0) {
-                <div class="py-20 text-center border-2 border-dashed border-slate-100">
-                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">No order records found</p>
-                  <a routerLink="/catalog" class="text-[10px] font-black uppercase underline underline-offset-4 text-slate-900">Start Shopping</a>
-                </div>
-              }
-
-              @if (totalPages() > 1) {
-                <div class="mt-8 pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
-                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    Showing Page <span class="text-slate-900">{{ currentPage() + 1 }}</span> of <span class="text-slate-900">{{ totalPages() }}</span>
-                  </p>
-                  
-                  <div class="flex gap-3">
-                    <button 
-                      (click)="prevPage()" 
-                      [disabled]="currentPage() === 0"
-                      class="px-6 py-2.5 border border-slate-200 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-transparent cursor-pointer">
-                      Previous
-                    </button>
-                    
-                    <button 
-                      (click)="nextPage()" 
-                      [disabled]="currentPage() >= totalPages() - 1"
-                      class="px-6 py-2.5 border border-slate-200 text-[10px] font-bold uppercase tracking-widest hover:border-slate-900 transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-transparent cursor-pointer">
-                      Next
-                    </button>
-                  </div>
-                </div>
-              }
-            </div>
-          }
-        </section>
+        <app-order-history
+          [orders]="orders()"
+          [selectedOrder]="selectedOrder()"
+          [isLoading]="isLoadingOrders()"
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          [totalElements]="totalElements()"
+          (onViewOrder)="handleViewOrder($event)"
+          (onCancelOrder)="handleCancelOrder($event)"
+          (onBackToHistory)="selectedOrder.set(null)"
+          (onPageChange)="loadOrderHistory($event)">
+        </app-order-history>
       }
 
       @if (activeTab() === 'security') {
-        <section class="animate-in fade-in duration-300">
-          <div class="flex items-end justify-between mb-8">
-            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Account Security</h2>
-          </div>
-          
-          <div class="max-w-md border border-slate-200 p-6 bg-slate-50">
-            <h3 class="text-[10px] font-black uppercase tracking-widest mb-6 text-slate-900">Change Password</h3>
-            
-            <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="space-y-6">
-              
-              @if (passwordSuccessMsg()) {
-                <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 text-[10px] font-bold uppercase tracking-widest">
-                  {{ passwordSuccessMsg() }}
-                </div>
-              }
-              @if (passwordErrorMsg()) {
-                <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 text-[10px] font-bold uppercase tracking-widest">
-                  {{ passwordErrorMsg() }}
-                </div>
-              }
-
-              <div class="space-y-2">
-                <label class="block text-[10px] font-bold uppercase text-slate-900 tracking-widest">Current Password</label>
-                <input type="password" formControlName="oldPassword" class="w-full p-3 bg-white border border-slate-200 text-sm focus:border-slate-900 focus:outline-none transition-colors">
-              </div>
-
-              <div class="space-y-2">
-                <label class="block text-[10px] font-bold uppercase text-slate-900 tracking-widest">New Password <span class="text-[9px] text-slate-400 lowercase normal-case ml-2 tracking-normal">(min 8 chars)</span></label>
-                <input type="password" formControlName="newPassword" class="w-full p-3 bg-white border border-slate-200 text-sm focus:border-slate-900 focus:outline-none transition-colors">
-              </div>
-
-              <div class="space-y-2">
-                <label class="block text-[10px] font-bold uppercase text-slate-900 tracking-widest">Confirm New Password</label>
-                <input type="password" formControlName="confirmPassword" class="w-full p-3 bg-white border border-slate-200 text-sm focus:border-slate-900 focus:outline-none transition-colors">
-                
-                @if (passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched) {
-                  <p class="text-[10px] font-bold text-red-500 uppercase tracking-widest mt-2">Passwords do not match.</p>
-                }
-              </div>
-
-              <div class="pt-4 border-t border-slate-200">
-                <button type="submit" [disabled]="passwordForm.invalid || isChangingPassword()" class="w-full bg-slate-900 text-white py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border-none cursor-pointer">
-                  {{ isChangingPassword() ? 'Encrypting...' : 'Update Password' }}
-                </button>
-              </div>
-            </form>
-          </div>
-        </section>
+        <app-security-settings
+          [isChanging]="isChangingPassword()"
+          [successMsg]="passwordSuccessMsg()"
+          [errorMsg]="passwordErrorMsg()"
+          (onSubmit)="handleChangePassword($event)">
+        </app-security-settings>
       }
-
     </main>
   </div>
 </div>

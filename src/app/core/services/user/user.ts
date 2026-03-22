@@ -4,6 +4,7 @@ import { UserResponse } from '../../models/user/user-response.model';
 import { Observable } from 'rxjs';
 import { PaginatedResponse } from '../../models/paginated-response.model';
 import { UserRequest } from '../../models/user/user-request.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class User {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:8080/api/users';
+  private apiUrl = `${environment.apiUrl}/users`;
 
   currentUserSignal = signal<UserResponse | null>(null);
 

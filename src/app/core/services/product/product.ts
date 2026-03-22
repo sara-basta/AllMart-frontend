@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ProductResponse } from '../../models/product/product-response.model';
 import { ProductRequest } from '../../models/product/product-request.model';
 import { PaginatedResponse } from '../../models/paginated-response.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class Product {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:8080/api/products';
+  private apiUrl = `${environment.apiUrl}/products`;
 
   getAllProducts(): Observable<PaginatedResponse<ProductResponse>> {
     return this.http.get<PaginatedResponse<ProductResponse>>(this.apiUrl);
