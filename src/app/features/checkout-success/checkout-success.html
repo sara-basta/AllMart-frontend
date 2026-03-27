@@ -1,0 +1,43 @@
+<div class="min-h-[70vh] max-w-4xl mx-auto px-6 py-20 flex items-center justify-center">
+  <section class="w-full border border-slate-100 bg-slate-50 p-8 md:p-12 text-center">
+    <div class="mx-auto mb-6 h-14 w-14 rounded-full bg-slate-900 text-slate-50 flex items-center justify-center">
+      <svg class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 010 1.414l-7.5 7.5a1 1 0 01-1.414 0l-3-3A1 1 0 016.204 9.79L8.5 12.086l6.796-6.796a1 1 0 011.408 0z" clip-rule="evenodd" />
+      </svg>
+    </div>
+
+    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Checkout Complete</p>
+    <h1 class="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">
+      {{ paymentStatus() === 'paid' ? 'Payment Successful' : 'Order Confirmed' }}.
+    </h1>
+
+    @if (orderId()) {
+      <p class="mt-4 text-sm text-slate-600">
+        Your order reference is
+        <span class="font-black text-slate-900">#{{ orderId() }}</span>
+      </p>
+    } @else {
+      <p class="mt-4 text-sm text-slate-600">Your order has been successfully placed.</p>
+    }
+
+    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+      <a
+        routerLink="/catalog"
+        class="bg-slate-900 text-slate-50 px-6 py-4 text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors"
+      >
+        Continue Shopping
+      </a>
+
+      @if (showOrdersButton()) {
+        <a
+          routerLink="/profile"
+          class="border border-slate-900 text-slate-900 px-6 py-4 text-xs font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-slate-50 transition-colors"
+        >
+          View Orders
+        </a>
+      }
+    </div>
+  </section>
+</div>
+
+

@@ -22,11 +22,13 @@ import { Orders } from './features/admin/orders/orders';
 import { Shipping } from './features/static/shipping/shipping';
 import { Privacy } from './features/static/privacy/privacy';
 import { Terms } from './features/static/terms/terms';
+import { CheckoutSuccess } from './features/checkout-success/checkout-success';
 
 
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard]},
     { path: 'register', component: Register, canActivate: [guestGuard] },
+    { path: 'cart/checkout', component: Checkout },
 
     { path: 'shipping', component: Shipping },
     { path: 'privacy', component: Privacy },
@@ -42,7 +44,7 @@ export const routes: Routes = [
             { path : 'products/:id', component: ProductDetail},
             { path : 'catalog', component: Catalog},
             { path : 'cart', component: CartPage},
-            { path : 'cart/checkout', component: Checkout},
+            { path : 'payment-success', component: CheckoutSuccess},
             { path : 'wishlist', component: WishlistPage}
         ]
     },
@@ -52,7 +54,7 @@ export const routes: Routes = [
         canActivate: [adminGuard],
         children: [
         { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    
+
         { path: 'dashboard', component: AdminDashboard },
         { path: 'products', component: Products },
         { path: 'products/new', component: ProductForm },
