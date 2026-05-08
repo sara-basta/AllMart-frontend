@@ -3,7 +3,6 @@
 [![Angular](https://img.shields.io/badge/Angular-Latest-red?style=flat-square&logo=angular)](https://angular.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green?style=flat-square&logo=node.js)](https://nodejs.org)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
 A responsive e-commerce storefront and administration dashboard built with Angular. The application supports guest and authenticated checkout workflows, JWT-secured API communication, Stripe payments, and real-time cart state management.
 
@@ -57,7 +56,7 @@ A responsive e-commerce storefront and administration dashboard built with Angul
 |---|---|
 | Frontend Framework | Angular |
 | Language | TypeScript |
-| Styling | CSS / Responsive Design |
+| Styling | Tailwind CSS / Responsive Design |
 | Authentication | JWT |
 | Payments | Stripe |
 | Media Storage | Cloudinary |
@@ -195,8 +194,8 @@ The application automatically reloads whenever source files change.
 
 | Service | Platform |
 |---|---|
-| Frontend Hosting | Vercel / Netlify |
-| Backend API | Railway / Render |
+| Frontend Hosting | Vercel |
+| Backend API | Render |
 | Database | Neon PostgreSQL |
 | Image Hosting | Cloudinary |
 
