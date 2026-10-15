@@ -1,6 +1,4 @@
-<div class="w-full bg-slate-800 text-slate-300 text-center text-xs py-2 px-4 tracking-wide">
-  ⚡ Hosted on free-tier infrastructure — first load may take 15–30s to wake up. Thank you for your patience.
-</div>
+
 <section class="relative w-full h-[60vh] md:h-[75vh] bg-slate-900 overflow-hidden group">
 
   <div
@@ -22,8 +20,8 @@
             <p class="text-lg text-slate-300 mb-10 max-w-md font-light leading-relaxed">
               {{ slide.subtitle }}
             </p>
-            <a [routerLink]="slide.path" 
-              [queryParams]="slide.queryParams" 
+            <a [routerLink]="slide.path"
+              [queryParams]="slide.queryParams"
               class="inline-block px-8 py-4 bg-white text-slate-900 text-sm font-bold uppercase tracking-widest hover:bg-slate-200 transition-colors shadow-lg cursor-pointer">
               {{ slide.ctaText }}
             </a>
