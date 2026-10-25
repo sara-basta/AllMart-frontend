@@ -1,5 +1,49 @@
 <section class="p-8">
-  <h2 class="text-3xl font-black uppercase tracking-tighter text-slate-900">Admin Users</h2>
-  <p class="mt-3 text-sm text-slate-600">Global user management view (all users across the platform).</p>
-</section>
+  <div class="bg-white p-8 border border-slate-100 shadow-sm">
+    <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-8">User Management</h2>
 
+    @if (errorMessage()) {
+      <p class="mb-6 p-4 bg-red-50 text-red-700 text-sm">{{ errorMessage() }}</p>
+    }
+
+    @if (isLoading()) {
+      <div class="py-12 flex justify-center"><div class="w-8 h-8 border-4 border-slate-200 border-t-slate-900 rounded-full animate-spin"></div></div>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+          <tr class="border-b-2 border-slate-900">
+            <th class="py-4 px-4 text-[10px] font-bold text-slate-900 uppercase tracking-widest">ID</th>
+            <th class="py-4 px-4 text-[10px] font-bold text-slate-900 uppercase tracking-widest">Full Name</th>
+            <th class="py-4 px-4 text-[10px] font-bold text-slate-900 uppercase tracking-widest">Email</th>
+            <th class="py-4 px-4 text-[10px] font-bold text-slate-900 uppercase tracking-widest text-right">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (user of users(); track user.id) {
+              <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <td class="py-4 px-4 text-sm font-medium text-slate-400">#{{ user.id }}</td>
+                <td class="py-4 px-4 text-sm font-bold text-slate-900">{{ user.firstName }} {{ user.lastName }}</td>
+                <td class="py-4 px-4 text-sm text-slate-600">{{ user.email }}</td>
+                <td class="py-4 px-4 text-sm font-medium text-right">
+                  <button (click)="deleteUser(user.id)" class="text-red-600 hover:text-red-900 font-bold uppercase tracking-wide text-xs">Delete</button>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="4" class="py-12 text-center text-xs font-bold text-slate-400 uppercase tracking-widest">No users found.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-8 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-500">
+        <span>Total: {{ totalElements() }} users</span>
+        <div class="flex gap-4">
+          <button [disabled]="currentPage() === 0" (click)="changePage(currentPage() - 1)" class="hover:text-slate-900 disabled:opacity-30 cursor-pointer border-none bg-transparent p-0">Previous</button>
+          <span class="text-slate-900">Page {{ currentPage() + 1 }} / {{ totalPages() || 1 }}</span>
+          <button [disabled]="currentPage() >= totalPages() - 1" (click)="changePage(currentPage() + 1)" class="hover:text-slate-900 disabled:opacity-30 cursor-pointer border-none bg-transparent p-0">Next</button>
+        </div>
+      </div>
+    }
+  </div>
+</section>

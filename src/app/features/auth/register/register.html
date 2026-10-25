@@ -44,6 +44,18 @@
                class="border border-slate-200 px-5 py-3 text-slate-900 text-sm focus:border-slate-900 focus:outline-none transition-colors">
       </div>
 
+      <fieldset class="flex flex-col gap-3">
+        <legend class="text-xs font-bold uppercase tracking-widest text-slate-900 mb-1">Account type</legend>
+        <label class="flex items-center gap-3 cursor-pointer text-sm text-slate-700">
+          <input type="radio" formControlName="role" value="CUSTOMER" class="accent-slate-900">
+          <span>Customer — shop on AllMart</span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer text-sm text-slate-700">
+          <input type="radio" formControlName="role" value="SELLER" class="accent-slate-900">
+          <span>Seller — list and sell products</span>
+        </label>
+      </fieldset>
+
       <button type="submit"
               class="w-full bg-slate-900 text-white px-8 py-4 mt-6 text-sm font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors cursor-pointer shadow-sm">
         Create Account

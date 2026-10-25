@@ -1,0 +1,58 @@
+<section class="p-8">
+  <div class="bg-white p-8 border border-slate-100 shadow-sm">
+    <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-8">Order Management</h2>
+
+    @if (errorMessage()) {
+      <p class="mb-6 p-4 bg-red-50 text-red-700 text-sm">{{ errorMessage() }}</p>
+    }
+
+    @if (isLoading()) {
+      <div class="py-12 flex justify-center"><div class="w-8 h-8 border-4 border-slate-200 border-t-slate-900 rounded-full animate-spin"></div></div>
+    } @else if (orders().length === 0) {
+      <div class="py-20 text-center border border-slate-100 bg-slate-50">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">No orders found.</p>
+      </div>
+    } @else {
+      <div class="space-y-6">
+        @for (order of orders(); track order.id) {
+          <div class="border border-slate-200 p-6">
+            <div class="flex flex-wrap justify-between items-start gap-4 mb-4 pb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-lg font-black text-slate-900 uppercase tracking-tighter mb-1">Order #{{ order.id }}</h3>
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">{{ order.orderDate | date:'medium' }}</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">
+                  City: <span class="text-slate-900">{{ order.shippingCity }}</span>
+                </p>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Status</span>
+                <span class="text-sm font-black text-slate-900 uppercase">{{ order.status }}</span>
+                <p class="mt-2 text-xl font-black text-green-700">{{ order.totalAmount }} MAD</p>
+              </div>
+            </div>
+
+            @if (order.items.length) {
+              <ul class="space-y-2">
+                @for (item of order.items; track item.id) {
+                  <li class="text-sm text-slate-700">
+                    <span class="font-bold text-slate-900">{{ item.productName }}</span>
+                    — x{{ item.quantity }} @ {{ item.unitPrice }} MAD
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="mt-8 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-500">
+        <span>Total: {{ totalElements() }} orders</span>
+        <div class="flex gap-4">
+          <button [disabled]="currentPage() === 0" (click)="changePage(currentPage() - 1)" class="hover:text-slate-900 disabled:opacity-30 cursor-pointer border-none bg-transparent p-0">Previous</button>
+          <span class="text-slate-900">Page {{ currentPage() + 1 }} / {{ totalPages() || 1 }}</span>
+          <button [disabled]="currentPage() >= totalPages() - 1" (click)="changePage(currentPage() + 1)" class="hover:text-slate-900 disabled:opacity-30 cursor-pointer border-none bg-transparent p-0">Next</button>
+        </div>
+      </div>
+    }
+  </div>
+</section>

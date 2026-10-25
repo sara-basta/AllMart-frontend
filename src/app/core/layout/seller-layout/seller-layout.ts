@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Auth } from '../../services/auth/auth';
 
 @Component({
   selector: 'app-seller-layout',
@@ -7,4 +8,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   templateUrl: './seller-layout.html',
   styleUrl: './seller-layout.css',
 })
-export class SellerLayout {}
+export class SellerLayout {
+  auth = inject(Auth);
+}

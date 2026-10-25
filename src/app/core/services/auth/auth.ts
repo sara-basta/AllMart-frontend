@@ -66,7 +66,7 @@ export class Auth {
 
     this.cart.clearLocalCart();
 
-    this.router.navigate(['/catalog']);
+    this.router.navigate(['/login']);
   }
 
   register(credentials: RegisterRequest): Observable<AuthResponse> {

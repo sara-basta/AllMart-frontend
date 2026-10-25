@@ -22,7 +22,8 @@ export class Register {
     firstName: ['', [Validators.required, Validators.minLength(2)]],
     lastName: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(4)]] 
+    password: ['', [Validators.required, Validators.minLength(4)]],
+    role: ['CUSTOMER' as 'CUSTOMER' | 'SELLER', Validators.required],
   });
 
   errorMessage = '';
@@ -34,13 +35,19 @@ export class Register {
         firstName: this.registerForm.value.firstName!,
         lastName: this.registerForm.value.lastName!,
         email: this.registerForm.value.email!,
-        password: this.registerForm.value.password!
+        password: this.registerForm.value.password!,
+        role: this.registerForm.value.role!,
       };
 
       this.auth.register(credentials).subscribe({
         next: (response) => {
           this.auth.saveToken(response.token);
-          this.router.navigate(['/']);
+          const role = this.auth.getUserRole()?.toUpperCase();
+          if (role === 'SELLER') {
+            this.router.navigate(['/seller/dashboard']);
+          } else {
+            this.router.navigate(['/']);
+          }
         },
       
         error: (err) => {
