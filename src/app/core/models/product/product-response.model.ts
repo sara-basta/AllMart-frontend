@@ -10,4 +10,6 @@ export interface ProductResponse {
     images: ProductImage[];
     averageRating?: number;
     reviewCount?: number;
+    sellerId?: number;
+    sellerName?: string;
 }

@@ -182,7 +182,10 @@ export class Checkout implements OnInit {
       addressId: addressId ?? undefined,
       newAddress: isNewAddress ? this.buildNewAddress() : undefined,
     }).subscribe({
-      next: (orderId) => this.executePayment(orderId, paymentMethod),
+      next: (orderId) => {
+        this.cart.clearLocalCart();
+        this.executePayment(orderId, paymentMethod);
+      },
       error: (err) => {
         console.error('Checkout failed:', err);
         this.isLoading.set(false);
@@ -221,6 +224,7 @@ export class Checkout implements OnInit {
         console.error('Payment initialization failed:', err);
         alert('Order created, but payment initialization failed. Check your order history.');
         this.isLoading.set(false);
+        void this.router.navigate(['/profile'], { queryParams: { tab: 'orders' } });
       },
     });
   }
@@ -232,8 +236,8 @@ export class Checkout implements OnInit {
     try {
       const orderId = this.stripeOrderId();
       const returnUrl = orderId
-        ? `${environment.frontendUrl}/payment-success?orderId=${orderId}&status=paid`
-        : `${environment.frontendUrl}/payment-success?status=paid`;
+        ? `${environment.frontendUrl}/payment-failed?orderId=${orderId}`
+        : `${environment.frontendUrl}/payment-failed`;
 
       const { error } = await this.stripeService.confirmPayment(returnUrl);
 

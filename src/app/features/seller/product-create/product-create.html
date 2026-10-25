@@ -1,0 +1,48 @@
+<section class="max-w-3xl mx-auto p-8">
+  <div class="flex items-center gap-4 mb-8">
+    <a routerLink="/seller/products" class="text-slate-400 hover:text-slate-900">←</a>
+    <h2 class="text-3xl font-black uppercase tracking-tighter text-slate-900">New product</h2>
+  </div>
+
+  @if (errorMessage()) { <p class="mb-6 p-4 bg-red-50 text-red-700 text-sm">{{ errorMessage() }}</p> }
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="space-y-6 bg-white border border-slate-100 p-8 shadow-sm">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <label class="text-[10px] font-bold uppercase tracking-widest">Name
+        <input formControlName="name" class="mt-2 w-full border border-slate-200 p-3 text-sm focus:border-slate-900 focus:outline-none">
+      </label>
+      <label class="text-[10px] font-bold uppercase tracking-widest">Category
+        <select formControlName="categoryId" class="mt-2 w-full border border-slate-200 p-3 text-sm focus:border-slate-900 focus:outline-none">
+          <option [value]="0" disabled>Select a category</option>
+          @for (category of categories(); track category.id) { <option [value]="category.id">{{ category.name }}</option> }
+        </select>
+      </label>
+      <label class="text-[10px] font-bold uppercase tracking-widest">Price (MAD)
+        <input type="number" formControlName="price" step="0.01" class="mt-2 w-full border border-slate-200 p-3 text-sm focus:border-slate-900 focus:outline-none">
+      </label>
+      <label class="text-[10px] font-bold uppercase tracking-widest">Stock quantity
+        <input type="number" formControlName="stockQuantity" class="mt-2 w-full border border-slate-200 p-3 text-sm focus:border-slate-900 focus:outline-none">
+      </label>
+    </div>
+    <label class="block text-[10px] font-bold uppercase tracking-widest">Description
+      <textarea formControlName="description" rows="5" class="mt-2 w-full border border-slate-200 p-3 text-sm focus:border-slate-900 focus:outline-none"></textarea>
+    </label>
+    <div>
+      <p class="text-[10px] font-bold uppercase tracking-widest mb-3">Product images</p>
+      <div class="flex flex-wrap gap-3 mb-3">
+        @for (url of imageUrls(); track url; let index = $index) {
+          <div class="relative w-24 h-24">
+            <img [src]="url" alt="Uploaded product image" class="w-full h-full object-cover">
+            <button type="button" (click)="removeImage(index)" class="absolute top-1 right-1 bg-red-600 text-white px-1 text-xs">×</button>
+          </div>
+        }
+      </div>
+      <input type="file" accept="image/*" multiple (change)="onFilesSelected($event)" class="text-sm">
+      @if (isUploading()) { <p class="mt-2 text-xs text-slate-500">Uploading images...</p> }
+    </div>
+    <button type="submit" [disabled]="isSubmitting() || isUploading() || productForm.invalid"
+      class="bg-slate-900 text-white px-8 py-4 text-[10px] font-bold uppercase tracking-widest disabled:opacity-40">
+      {{ isSubmitting() ? 'Creating...' : 'Create product' }}
+    </button>
+  </form>
+</section>

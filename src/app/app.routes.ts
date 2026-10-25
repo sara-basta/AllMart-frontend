@@ -5,30 +5,31 @@ import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register'
 import { Home } from './features/home/home';
 import { guestGuard } from './core/guards/guest/guest-guard';
-import { adminGuard } from './core/guards/admin/admin-guard';
 import { MainLayout } from './core/layout/main-layout/main-layout';
-import { AdminLayout } from './core/layout/admin-layout/admin-layout';
 import { ProductDetail } from './features/product-detail/product-detail';
 import {Catalog} from './features/catalog/catalog';
 import { CartPage } from './features/cart-page/cart-page';
 import {Checkout} from './features/checkout/checkout';
 import { WishlistPage } from './features/wishlist-page/wishlist-page';
-import { AdminDashboard } from './features/admin/admin-dashboard/admin-dashboard';
-import { Products } from './features/admin/products/products';
-import { ProductForm } from './features/admin/products/product-form/product-form';
-import { Categories } from './features/admin/categories/categories';
-import { Users } from './features/admin/users/users';
-import { Orders } from './features/admin/orders/orders';
 import { Shipping } from './features/static/shipping/shipping';
 import { Privacy } from './features/static/privacy/privacy';
 import { Terms } from './features/static/terms/terms';
 import { CheckoutSuccess } from './features/checkout-success/checkout-success';
+import { sellerGuard } from './core/guards/seller/seller-guard';
+import { SellerLayout } from './core/layout/seller-layout/seller-layout';
+import { SellerDashboard } from './features/seller/seller-dashboard/seller-dashboard';
+import { SellerOrders } from './features/seller/seller-orders/seller-orders';
+import { SellerProducts } from './features/seller/seller-products/seller-products';
+import { ProductCreate } from './features/seller/product-create/product-create';
+import { ProductEdit } from './features/seller/product-edit/product-edit';
+import { PaymentFailed } from './features/payment-failed/payment-failed';
 
 
 export const routes: Routes = [
     { path: 'login', component: Login, canActivate: [guestGuard]},
     { path: 'register', component: Register, canActivate: [guestGuard] },
     { path: 'cart/checkout', component: Checkout },
+    { path: 'payment-failed', component: PaymentFailed },
 
     { path: 'shipping', component: Shipping },
     { path: 'privacy', component: Privacy },
@@ -50,19 +51,20 @@ export const routes: Routes = [
     },
     {
         path: 'admin',
-        component: AdminLayout,
-        canActivate: [adminGuard],
+        loadChildren: () => import('./features/admin/admin.routes').then(m => m.adminRoutes),
+    },
+    {
+        path: 'seller',
+        component: SellerLayout,
+        canActivate: [sellerGuard],
         children: [
-        { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-
-        { path: 'dashboard', component: AdminDashboard },
-        { path: 'products', component: Products },
-        { path: 'products/new', component: ProductForm },
-        { path: 'products/:id', component: ProductForm },
-        { path: 'categories', component: Categories },
-        { path: 'orders', component: Orders },
-        { path: 'users', component: Users },
-        ]
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+            { path: 'dashboard', component: SellerDashboard },
+            { path: 'orders', component: SellerOrders },
+            { path: 'products', component: SellerProducts },
+            { path: 'products/new', component: ProductCreate },
+            { path: 'products/edit/:id', component: ProductEdit },
+        ],
     },
     { path: '**', redirectTo: '' }
 ];

@@ -1,0 +1,13 @@
+<div class="min-h-[70vh] max-w-4xl mx-auto px-6 py-20 flex items-center justify-center">
+  <section class="w-full border border-red-200 bg-red-50 p-8 md:p-12 text-center">
+    <div class="mx-auto mb-6 h-14 w-14 rounded-full bg-red-600 text-white flex items-center justify-center text-2xl">!</div>
+    <p class="text-[10px] font-bold uppercase tracking-widest text-red-600 mb-2">Payment declined</p>
+    <h1 class="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-900">Payment failed.</h1>
+    <p class="mt-4 text-sm text-slate-600">{{ message() }}</p>
+    @if (orderId()) { <p class="mt-2 text-sm text-slate-600">Order reference: <strong>#{{ orderId() }}</strong></p> }
+    <div class="mt-10 flex justify-center gap-4">
+      <a routerLink="/cart/checkout" class="bg-slate-900 text-white px-6 py-4 text-xs font-bold uppercase tracking-widest">Try again</a>
+      <a routerLink="/catalog" class="border border-slate-900 text-slate-900 px-6 py-4 text-xs font-bold uppercase tracking-widest">Continue shopping</a>
+    </div>
+  </section>
+</div>

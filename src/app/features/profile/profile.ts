@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { User } from '../../core/services/user/user';
 import { Address } from '../../core/services/address/address';
 import { Order } from '../../core/services/order/order';
@@ -20,6 +21,7 @@ export class Profile implements OnInit{
   public user = inject(User);
   private address = inject(Address);
   private order = inject(Order);
+  private route = inject(ActivatedRoute);
 
   activeTab = signal<'profile' | 'orders' | 'security'>('profile');
 
@@ -39,6 +41,9 @@ export class Profile implements OnInit{
   passwordErrorMsg = signal<string | null>(null);
 
   ngOnInit() {
+    if (this.route.snapshot.queryParamMap.get('tab') === 'orders') {
+      this.activeTab.set('orders');
+    }
     this.address.loadMyAddresses();
     this.loadOrderHistory(this.currentPage());
   }

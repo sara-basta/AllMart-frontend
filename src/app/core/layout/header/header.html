@@ -61,6 +61,11 @@
             <button routerLink="/profile" class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors cursor-pointer border-none bg-transparent p-0">
               Profile
             </button>
+            @if (canAccessSellerDashboard) {
+              <a routerLink="/seller/dashboard" class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors cursor-pointer">
+                Seller Dashboard
+              </a>
+            }
             <button (click)="logout()" class="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors cursor-pointer border-none bg-transparent p-0">
               Logout
             </button>

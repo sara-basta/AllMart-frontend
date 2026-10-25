@@ -1,0 +1,49 @@
+<section class="p-8">
+  <div class="flex flex-wrap justify-between items-end gap-4 mb-8">
+    <div>
+      <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Seller workspace</p>
+      <h2 class="text-3xl font-black uppercase tracking-tighter text-slate-900">Orders</h2>
+    </div>
+    <select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event); loadOrders()"
+      class="border-2 border-slate-200 bg-white px-4 py-3 text-[10px] font-bold uppercase tracking-widest focus:border-slate-900 focus:outline-none">
+      <option value="">All statuses</option>
+      @for (status of statusOptions; track status) { <option [value]="status">{{ status }}</option> }
+    </select>
+  </div>
+
+  @if (errorMessage()) { <p class="mb-6 p-4 bg-red-50 text-red-700 text-sm">{{ errorMessage() }}</p> }
+  @if (isLoading()) {
+    <div class="py-16 flex justify-center"><div class="w-8 h-8 border-4 border-slate-200 border-t-slate-900 rounded-full animate-spin"></div></div>
+  } @else {
+    <div class="space-y-4">
+      @for (order of orders(); track order.vendorOrderId) {
+        <article class="bg-white border border-slate-100 p-6 shadow-sm">
+          <div class="flex flex-wrap justify-between gap-4 mb-5">
+            <div>
+              <h3 class="text-lg font-black text-slate-900">Vendor order #{{ order.vendorOrderId }}</h3>
+              <p class="text-xs text-slate-500 mt-1">Parent order #{{ order.parentOrderId }} · {{ order.createdAt | date:'medium' }}</p>
+              <p class="text-xs text-slate-500 mt-1">{{ order.buyerEmail }} · {{ order.shippingCity }}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-lg font-black text-green-700">{{ order.vendorSubtotal | number:'1.2-2' }} MAD</p>
+              <select (change)="updateStatus(order, $event)" [disabled]="order.status === 'DELIVERED'"
+                class="mt-2 border border-slate-200 px-3 py-2 text-[10px] font-bold uppercase tracking-widest disabled:opacity-50">
+                @for (status of statusOptions; track status) { <option [value]="status" [selected]="status === order.status">{{ status }}</option> }
+              </select>
+            </div>
+          </div>
+          <div class="border-t border-slate-100 pt-4 space-y-2">
+            @for (item of order.items; track item.id) {
+              <div class="flex justify-between text-sm">
+                <span>{{ item.productName }} <span class="text-slate-400">× {{ item.quantity }}</span></span>
+                <span class="font-bold">{{ item.totalPrice | number:'1.2-2' }} MAD</span>
+              </div>
+            }
+          </div>
+        </article>
+      } @empty {
+        <div class="py-16 text-center bg-white border border-slate-100 text-xs font-bold uppercase tracking-widest text-slate-400">No orders found.</div>
+      }
+    </div>
+  }
+</section>

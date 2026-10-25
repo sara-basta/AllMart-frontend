@@ -11,8 +11,14 @@
 
     <main class="flex-1">
       <div class="flex flex-col">
-        @for (item of cartItems(); track item.product.id) {
-          <div class="flex flex-col md:flex-row gap-8 py-10 border-b border-slate-100 first:pt-0">
+        @for (group of sellerGroups(); track group.sellerName) {
+          <section class="border-b border-slate-200 py-8 first:pt-0">
+            <div class="mb-6 flex items-center gap-3">
+              <span class="h-2 w-2 rounded-full bg-slate-900"></span>
+              <h2 class="text-xs font-black uppercase tracking-widest text-slate-900">Sold by {{ group.sellerName }}</h2>
+            </div>
+            @for (item of group.items; track item.product.id) {
+            <div class="flex flex-col md:flex-row gap-8 py-6 first:pt-0">
 
             <div class="w-full md:w-40 aspect-square bg-slate-50 flex-shrink-0 relative overflow-hidden border border-slate-100">
               @if (item.product.images && item.product.images.length > 0) {
@@ -47,7 +53,9 @@
                 </button>
               </div>
             </div>
-          </div>
+            </div>
+            }
+          </section>
         } @empty {
           <div class="py-32 text-center border border-slate-100 flex flex-col items-center justify-center">
             <p class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-8">Your shopping cart is currently empty.</p>

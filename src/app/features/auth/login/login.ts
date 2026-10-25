@@ -19,7 +19,7 @@ export class Login {
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(4)]] 
+    password: ['', [Validators.required, Validators.minLength(4)]]
   });
 
   errorMessage = '';
@@ -38,11 +38,13 @@ export class Login {
           this.auth.saveToken(response.token);
 
           // Check role and redirect accordingly
-          const role = this.auth.getUserRole();
+          const role = this.auth.getUserRole()?.toUpperCase();
           if (role === 'ADMIN') {
             this.router.navigate(['/admin/dashboard']);
+          } else if (role === 'SELLER') {
+            this.router.navigate(['/seller/dashboard']);
           } else {
-            this.router.navigate(['/']); 
+            this.router.navigate(['/']);
           }
         },
         error: (err) => {

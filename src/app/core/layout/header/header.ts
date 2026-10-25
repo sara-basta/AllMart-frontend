@@ -22,6 +22,11 @@ export class Header implements OnInit{
 
   totalItems = this.cart.cartCount;
 
+  get canAccessSellerDashboard(): boolean {
+    const role = this.auth.getUserRole();
+    return role === 'SELLER' || role === 'ADMIN';
+  }
+
   ngOnInit(): void {
     // when the header appears, check if we have a token
     if (this.auth.getToken()) {

@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Cart } from '../../core/services/cart/cart';
 import { RouterLink, Router } from '@angular/router';
+import { CartItem } from '../../core/models/cart/cart-item.model';
 
 @Component({
   selector: 'app-cart-page',
@@ -15,6 +16,14 @@ export class CartPage {
   cartCount = this.cart.cartCount;
   cartItems = this.cart.cartItems;
   totalPrice = this.cart.totalPrice;
+  sellerGroups = computed(() => {
+    const groups = new Map<string, CartItem[]>();
+    for (const item of this.cartItems()) {
+      const seller = item.product.sellerName?.trim() || 'Independent seller';
+      groups.set(seller, [...(groups.get(seller) ?? []), item]);
+    }
+    return Array.from(groups.entries()).map(([sellerName, items]) => ({ sellerName, items }));
+  });
 
   updateQuantity(productId: number, delta: number) {
     this.cart.updateQuantity(productId, delta);

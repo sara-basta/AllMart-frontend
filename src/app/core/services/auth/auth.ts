@@ -33,6 +33,27 @@ export class Auth {
     return localStorage.getItem('jwt_token');
   }
 
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const encodedPayload = token.split('.')[1];
+      const normalizedPayload = encodedPayload.replace(/-/g, '+').replace(/_/g, '/');
+      const decodedPayload = atob(
+        normalizedPayload.padEnd(Math.ceil(normalizedPayload.length / 4) * 4, '='),
+      );
+      const payload = JSON.parse(decodedPayload) as {
+        userId?: number | string;
+      };
+      const claim = payload.userId;
+      const userId = typeof claim === 'number' ? claim : Number(claim);
+      return Number.isInteger(userId) && userId > 0 ? userId : null;
+    } catch {
+      return null;
+    }
+  }
+
   isLoggedIn(): boolean {
     return this.getToken() !== null;
   }

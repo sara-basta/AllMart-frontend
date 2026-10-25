@@ -1,11 +1,11 @@
 import { Component, input, output } from '@angular/core';
-import { DatePipe, NgClass } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OrderResponse } from '../../../core/models/order/order-response.model';
 
 @Component({
   selector: 'app-order-history',
-  imports: [DatePipe, NgClass, RouterLink],
+  imports: [DatePipe, RouterLink],
   templateUrl: './order-history.html',
   styleUrl: './order-history.css',
 })
